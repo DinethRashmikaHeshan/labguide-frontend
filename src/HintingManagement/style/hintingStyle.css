@@ -1,0 +1,79 @@
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #343a40;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: width 0.3s;
+  }
+  
+  .sidebar.closed {
+    width: 0;
+    overflow: hidden;
+  }
+  
+  .sidebar .profile {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .sidebar .profile-pic {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .sidebar .profile-name {
+    margin-top: 10px;
+  }
+  
+  .sidebar .nav {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar .nav-item {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .sidebar .nav-item:hover {
+    background-color: #495057;
+  }
+  
+  .sidebar .logout-btn {
+    position: absolute;
+    border-radius: 10px;
+    bottom: 20px;
+    width: 80%;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-left: 20px;
+    cursor: pointer;
+  }
+  
+  .content {
+    margin-left: 250px;
+    padding: 20px;
+    width: calc(100% - 250px);
+    transition: width 0.3s, margin-left 0.3s;
+  }
+  
+  .sidebar.closed ~ .content {
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 260px;
+    z-index: 1000;
+  }
+
+  
