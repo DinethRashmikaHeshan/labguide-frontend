@@ -16,10 +16,13 @@ const files = {
   }
 };
 
-const CodeEditorContainer = () => {
+const CodeEditorContainer = ({ username, userId }) => {
   const [fileName, setFileName] = useState("script.c");
   const [errors, setErrors] = useState([]);
   const [comparisonErrors, setComparisonErrors] = useState([]);
+  console.log('Username in CodeEditorContainer:', username);
+console.log('User ID in CodeEditorContainer:', userId);
+
 
   const [logicalErrors, setLogicalErrors] = useState([]); 
 
@@ -116,6 +119,11 @@ const CodeEditorContainer = () => {
       />
       <ErrorList errors={errors} comparisonErrors={comparisonErrors} />
       <LogicalErrorList logicalErrors={logicalErrors} /> 
+
+      {/* Display the username and userId at the bottom */}
+      <div style={{ position: 'fixed', bottom: 0, width: '100%', textAlign: 'center', padding: '10px', background: '#f1f1f1' }}>
+        <p>Logged in as: {username} (ID: {userId})</p>
+      </div>
     </div>
   );
 };
