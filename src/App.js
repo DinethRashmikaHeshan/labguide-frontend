@@ -1,11 +1,13 @@
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Exam from './components/Exam'
-import CreateExam from './components/createExam'
-import CreateQuestion from './components/createQuestion'
-import Questions from './components/Questions'
-import Test from './components/Test'
-import TestQuestions from './components/TestQuestions';
+import Exam from './ExamManagement/Exam'
+import CreateExam from './ExamManagement/createExam'
+import CreateQuestion from './ExamManagement/createQuestion'
+import Questions from './ExamManagement/Questions'
+import Test from './ExamManagement/Test'
+import TestQuestions from './ExamManagement/TestQuestions';
+import Results from './ExamManagement/Results';
+import ResultTest from './ExamManagement/ResultTest';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
           <Route path='/question/:id' element={<Questions />}></Route>
           <Route path='/test' element={<Test />}></Route>
           <Route path='/testQuestions/:id' element={<TestQuestions />}></Route>
+          <Route path='/results' element={<Results />}></Route>
+          <Route path='/results/:id' element={<ResultTest />}></Route>
         </Routes>
       </BrowserRouter>
     </div>

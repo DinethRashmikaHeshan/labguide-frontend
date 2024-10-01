@@ -1,84 +1,104 @@
-import React, { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 function TestQuestions() {
-    const { id } = useParams()
-    const navigate = useNavigate()
-    const [questions, setQuestions] = useState([])
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-    const [timeLeft, setTimeLeft] = useState(1200) // 20 minutes for example
-    const [answers, setAnswers] = useState({}) // To store user answers
-    const [showSummary, setShowSummary] = useState(false) // To display summary page
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const location = useLocation();
+    
+    const [questions, setQuestions] = useState([]);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [timeLeft, setTimeLeft] = useState(1200); // 20 minutes
+    const [answers, setAnswers] = useState({});
+    const [showSummary, setShowSummary] = useState(false);
+    const [registrationNo, setRegistrationNo] = useState('');
 
+    // Use effect to set registration number if available
     useEffect(() => {
-        getQuestions()
-    }, [])
+        if (location.state && location.state.registrationNo) {
+            setRegistrationNo(location.state.registrationNo);
+        }
+    }, [location.state]);
 
+    // Fetch questions when component mounts
     useEffect(() => {
+        getQuestions();
+        
         const timer = setInterval(() => {
             setTimeLeft(prevTime => {
                 if (prevTime <= 0) {
-                    clearInterval(timer)
-                    finishExam() // Automatically finish the exam when time is up
-                    return 0
+                    clearInterval(timer);
+                    finishExam(); // Automatically finish the exam when time is up
+                    return 0;
                 }
-                return prevTime - 1
-            })
-        }, 1000)
+                return prevTime - 1;
+            });
+        }, 1000);
 
         // Cleanup function to clear the interval when the component unmounts
-        return () => clearInterval(timer)
-    }, [])
+        return () => clearInterval(timer);
+    }, []);
 
     const getQuestions = async () => {
         try {
-            const res = await axios.get(`http://localhost:3000/exam/exam/${id}`)
-            setQuestions(res.data)
+            const res = await axios.get(`http://localhost:3000/exam/exam/${id}`);
+            setQuestions(res.data);
         } catch (error) {
-            alert("Error: " + error.response?.data || error.message)
+            alert("Error: " + (error.response?.data || error.message));
         }
-    }
+    };
 
-    const handleAnswerChange = (questionId, answer) => {
-        setAnswers({ ...answers, [questionId]: answer })
-    }
+    const handleAnswerChange = (questionId, questionText, answer) => {
+        setAnswers(prevAnswers => ({
+            ...prevAnswers,
+            [questionId]: {
+                questionText: questionText,
+                answer: answer
+            }
+        }));
+    };
 
     const saveAnswer = async () => {
+        const formattedAnswers = Object.entries(answers).map(([questionId, { questionText, answer }]) => ({
+            questionId: questionId,
+            questionText: questionText,
+            answer: answer
+        }));
+
         try {
-            // Save the current answers (You can customize this to match your backend structure)
-            await axios.post(`http://localhost:3000/exam/submit`, {
+            await axios.post(`http://localhost:3000/exam/results`, {
                 examId: id,
-                answers: answers,
-            })
+                registrationNo: registrationNo,
+                answers: formattedAnswers,
+            });
+            console.log('Answers saved successfully:', formattedAnswers);
         } catch (error) {
-            console.error('Error saving answers:', error.response?.data || error.message)
+            console.error('Error saving answers:', error.response?.data || error.message);
         }
-    }
+    };
 
     const nextQuestion = () => {
-        saveAnswer() // Save the answer before moving to the next question
         if (currentQuestionIndex < questions.length - 1) {
-            setCurrentQuestionIndex(currentQuestionIndex + 1)
+            setCurrentQuestionIndex(currentQuestionIndex + 1);
         }
-    }
+    };
 
     const prevQuestion = () => {
         if (currentQuestionIndex > 0) {
-            setCurrentQuestionIndex(currentQuestionIndex - 1)
+            setCurrentQuestionIndex(currentQuestionIndex - 1);
         }
-    }
+    };
 
     const finishExam = () => {
-        saveAnswer() // Save answers before finishing
-        setShowSummary(true) // Display the summary page
-    }
+        setShowSummary(true);
+    };
 
     const formatTime = (timeInSeconds) => {
-        const minutes = Math.floor(timeInSeconds / 60)
-        const seconds = timeInSeconds % 60
-        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
-    }
+        const minutes = Math.floor(timeInSeconds / 60);
+        const seconds = timeInSeconds % 60;
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    };
 
     const renderQuestion = (question) => {
         switch (question.questionType) {
@@ -92,14 +112,14 @@ function TestQuestions() {
                                     type="radio"
                                     name={question._id}
                                     value={option}
-                                    onChange={() => handleAnswerChange(question._id, option)}
-                                    checked={answers[question._id] === option}
+                                    onChange={() => handleAnswerChange(question._id, question.question, option)} // Pass question text
+                                    checked={answers[question._id]?.answer === option} // Adjust checked condition
                                 />
                                 {option}
                             </div>
                         ))}
                     </div>
-                )
+                );
             case 'MultiChoiceQuestion':
                 return (
                     <div>
@@ -111,19 +131,19 @@ function TestQuestions() {
                                     name={question._id}
                                     value={option}
                                     onChange={(e) => {
-                                        const currentAnswers = answers[question._id] || []
+                                        const currentAnswers = answers[question._id]?.answer || [];
                                         const updatedAnswers = e.target.checked
                                             ? [...currentAnswers, option]
-                                            : currentAnswers.filter(a => a !== option)
-                                        handleAnswerChange(question._id, updatedAnswers)
+                                            : currentAnswers.filter(a => a !== option);
+                                        handleAnswerChange(question._id, question.question, updatedAnswers); // Pass question text
                                     }}
-                                    checked={answers[question._id]?.includes(option)}
+                                    checked={answers[question._id]?.answer?.includes(option)} // Adjust checked condition
                                 />
                                 {option}
                             </div>
                         ))}
                     </div>
-                )
+                );
             case 'EssayQuestion':
                 return (
                     <div>
@@ -131,17 +151,16 @@ function TestQuestions() {
                         <textarea
                             rows="6"
                             className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md text-lg"
-                            onChange={(e) => handleAnswerChange(question._id, e.target.value)}
-                            value={answers[question._id] || ''}
+                            onChange={(e) => handleAnswerChange(question._id, question.question, e.target.value)} // Pass question text
+                            value={answers[question._id]?.answer || ''}
                         />
                     </div>
-                )
+                );
             default:
-                return null
+                return null;
         }
-    }
+    };
 
-    // Summary page that shows the question number and submitted answer
     const renderSummary = () => {
         return (
             <div className="bg-white p-8 rounded-lg shadow-lg max-w-3xl w-full">
@@ -154,13 +173,13 @@ function TestQuestions() {
                                 className="w-full p-4 border border-gray-300 rounded-md text-lg"
                                 rows="6"
                                 readOnly
-                                value={answers[question._id] || 'No answer provided'}
+                                value={answers[question._id]?.answer || 'No answer provided'}
                             />
                         ) : (
                             <p className="italic">
-                                Your Answer: {Array.isArray(answers[question._id]) 
-                                    ? answers[question._id].join(', ') 
-                                    : answers[question._id] || 'No answer provided'}
+                                Your Answer: {Array.isArray(answers[question._id]?.answer) 
+                                    ? answers[question._id]?.answer.join(', ') 
+                                    : answers[question._id]?.answer || 'No answer provided'}
                             </p>
                         )}
                     </div>
@@ -172,22 +191,23 @@ function TestQuestions() {
                     Finish Exam
                 </button>
             </div>
-        )
-    }
+        );
+    };
 
     const finishAndSubmit = () => {
-        alert('Your answers have been submitted successfully!')
-        navigate('/test') // Redirect to home or another page after the exam
-    }
+        saveAnswer(); // Call saveAnswer here to save the answers
+        alert('Your answers have been submitted successfully!');
+        navigate('/test'); // Redirect to home or another page after the exam
+    };
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-6482AD to-7FA1C3 p-8 flex flex-col items-center">
+        <div className="min-h-screen bg-gradient-to-r from-[#6482AD] to-[#7FA1C3] p-8 flex flex-col items-center">
             <div className="fixed top-4 right-4 bg-white text-xl p-4 rounded shadow">
                 Time Left: {formatTime(timeLeft)}
             </div>
 
             {showSummary ? (
-                renderSummary() // Show summary page if the exam is finished
+                renderSummary()
             ) : (
                 questions.length > 0 && (
                     <div className="bg-white p-8 rounded-lg shadow-lg max-w-3xl w-full">
@@ -195,7 +215,6 @@ function TestQuestions() {
                         {renderQuestion(questions[currentQuestionIndex])}
 
                         <div className="flex justify-between mt-6">
-                            {/* Show 'Previous' button only after the first question */}
                             {currentQuestionIndex > 0 && (
                                 <button
                                     className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -205,7 +224,6 @@ function TestQuestions() {
                                 </button>
                             )}
                             
-                            {/* If it's the last question, show 'Finish', otherwise 'Next' */}
                             {currentQuestionIndex === questions.length - 1 ? (
                                 <button
                                     className="bg-green-500 text-white px-4 py-2 rounded"
@@ -226,7 +244,7 @@ function TestQuestions() {
                 )
             )}
         </div>
-    )
+    );
 }
 
-export default TestQuestions
+export default TestQuestions;
