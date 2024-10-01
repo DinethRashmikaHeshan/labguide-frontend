@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 import CodeEditor from './CodeEditor';
 import ErrorList from './ErrorList';
 import LogicalErrorList from './LogicalErrorList';
+import { useNavigate } from 'react-router-dom';
+
 
 const files = {
   "script.c": {
@@ -21,7 +23,14 @@ const CodeEditorContainer = ({ username, userId }) => {
   const [errors, setErrors] = useState([]);
   const [comparisonErrors, setComparisonErrors] = useState([]);
   console.log('Username in CodeEditorContainer:', username);
-console.log('User ID in CodeEditorContainer:', userId);
+  console.log('User ID in CodeEditorContainer:', userId);
+
+  const navigate = useNavigate();
+
+  const navigateToReport = () => {
+    navigate('/report'); // Navigate to the report page
+  };
+
 
 
   const [logicalErrors, setLogicalErrors] = useState([]); 
@@ -89,10 +98,40 @@ console.log('User ID in CodeEditorContainer:', userId);
       }
       const result = await response.json();
       setLogicalErrors(result.logicalErrors);
+
+      // Save the logical errors to the database
+    await saveLogicalErrors(result.logicalErrors);
     } catch (error) {
       console.error('Error checking logical errors:', error);
     }
   }
+
+  // Function to save logical errors
+async function saveLogicalErrors(logicalErrors) {
+  try {
+    const response = await fetch('http://localhost:5001/api/saveLogicalErrors', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        userId,
+        logicalErrors, // Pass the logical errors received from the backend
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log('Received logical errors:', result.logicalErrors);
+    console.log(result.message); // Display success message or handle it
+  } catch (error) {
+    console.error('Error saving logical errors:', error);
+  }
+}
 
 
   return (
@@ -112,6 +151,7 @@ console.log('User ID in CodeEditorContainer:', userId);
       <button onClick={checkLogicalErrors}> {/* Added button for logical errors */}
         Check for Logical Errors
       </button>
+      <button onClick={navigateToReport}>Check My Report</button>
       <CodeEditor
         fileName={fileName}
         files={files}

@@ -11,6 +11,7 @@ const LogicalErrorList = ({ logicalErrors }) => {
           {logicalErrors.map((error, index) => (
             <li key={index} className={`error-item ${error.type.toLowerCase().replace(' ', '-')}`}>
               <strong>Type:</strong> {error.type} <br />
+              <strong>Category:</strong> {error.category} <br /> {/* Display category */}
               <strong>Message:</strong> {error.message} <br />
               <strong>Line:</strong> {error.line}
             </li>

@@ -4,6 +4,10 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Login from './components/Login'; // Make sure you have this component
 import CodeEditorContainer from './components/CodeEditorContainer';
 import Signup from './components/Signup'; // Import Signup component
+import LogicalErrorsReport from './components/LogicalErrorsReport'; // Import the new report component
+import LecturerDashboard from './components/LecturerDashboard';
+import AllStudentsReports from './components/AllStudentsReports';
+
 
 function App() {
   const [token, setToken] = useState(null);
@@ -31,6 +35,9 @@ function App() {
           <Route path="/login" element={<Login setToken={handleLoginSuccess} setUsername={setUsername} setUserId={setUserId}/>} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/code-editor" element={<CodeEditorContainer username={username} userId={userId} />} />
+          <Route path="/report" element={<LogicalErrorsReport username={username} />} /> {/* New report route */}
+          <Route path="/lecturer-dashboard" element={<LecturerDashboard />} />
+          <Route path="/all-students-reports" element={<AllStudentsReports />} />
           <Route path="/" element={<Navigate to="/login" />} />
         </Routes>
       </div>
