@@ -201,48 +201,59 @@ function TestQuestions() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-[#6482AD] to-[#7FA1C3] p-8 flex flex-col items-center">
+        <div className="min-h-screen bg-gradient-to-r from-[#6482AD] to-[#7FA1C3] p-8 flex flex-col">
             <div className="fixed top-4 right-4 bg-white text-xl p-4 rounded shadow">
                 Time Left: {formatTime(timeLeft)}
             </div>
 
-            {showSummary ? (
-                renderSummary()
-            ) : (
-                questions.length > 0 && (
-                    <div className="bg-white p-8 rounded-lg shadow-lg max-w-3xl w-full">
-                        <h1 className="text-2xl font-bold mb-4">Question {currentQuestionIndex + 1}/{questions.length}</h1>
-                        {renderQuestion(questions[currentQuestionIndex])}
+            <div className="flex-grow flex items-center justify-center">
+                {showSummary ? (
+                    renderSummary()
+                ) : (
+                    questions.length > 0 && (
+                        <div className="bg-white p-8 rounded-lg shadow-lg max-w-3xl w-full">
+                            <h1 className="text-2xl font-bold mb-4">Question {currentQuestionIndex + 1}/{questions.length}</h1>
+                            {renderQuestion(questions[currentQuestionIndex])}
 
-                        <div className="flex justify-between mt-6">
-                            {currentQuestionIndex > 0 && (
-                                <button
-                                    className="bg-blue-500 text-white px-4 py-2 rounded"
-                                    onClick={prevQuestion}
-                                >
-                                    Previous
-                                </button>
-                            )}
-                            
-                            {currentQuestionIndex === questions.length - 1 ? (
-                                <button
-                                    className="bg-green-500 text-white px-4 py-2 rounded"
-                                    onClick={finishExam}
-                                >
-                                    Finish
-                                </button>
-                            ) : (
-                                <button
-                                    className="bg-blue-500 text-white px-4 py-2 rounded"
-                                    onClick={nextQuestion}
-                                >
-                                    Next
-                                </button>
-                            )}
+                            <div className="flex justify-between mt-6">
+                                {currentQuestionIndex > 0 && (
+                                    <button
+                                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                                        onClick={prevQuestion}
+                                    >
+                                        Previous
+                                    </button>
+                                )}
+                                
+                                {currentQuestionIndex === questions.length - 1 ? (
+                                    <button
+                                        className="bg-green-500 text-white px-4 py-2 rounded"
+                                        onClick={finishExam}
+                                    >
+                                        Finish
+                                    </button>
+                                ) : (
+                                    <button
+                                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                                        onClick={nextQuestion}
+                                    >
+                                        Next
+                                    </button>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                )
-            )}
+                    )
+                )}
+            </div>
+
+            {/* Footer */}
+            <footer className="bg-gray-900 text-white text-center p-4">
+                <p>&copy; 2024 Programming Assistant. All rights reserved.</p>
+                <div className="flex justify-center space-x-4 mt-2">
+                    <a href="/privacy" className="text-gray-400 hover:underline transition duration-200">Privacy Policy</a>
+                    <a href="/terms" className="text-gray-400 hover:underline transition duration-200">Terms of Service</a>
+                </div>
+            </footer>
         </div>
     );
 }
