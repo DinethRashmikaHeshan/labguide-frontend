@@ -23,7 +23,8 @@ function CreateQuestion() {
         options: optionsArray,
         correctAnswer,
         correctAnswers: correctAnswersArray,
-        wordLimit: Number(wordLimit)
+        wordLimit: Number(wordLimit),
+        answer: answer
       }
 
       console.log(data)
@@ -44,6 +45,7 @@ function CreateQuestion() {
   const [marks, setMarks] = useState(null)
   const [time, setTime] = useState(null)
   const [wordLimit, setWordLimit] = useState(null)
+  const [answer, setAnswer] = useState()
 
   const handleChange = (event) => {
     setQuestionType(event.target.value)
@@ -166,6 +168,15 @@ function CreateQuestion() {
                 onChange={(e) => setWordLimit(e.target.value)}
                 className="w-full p-2 border border-7FA1C3 rounded-md focus:outline-none focus:ring-2 focus:ring-6482AD"
               />
+              <label htmlFor="wordLimit" className="block text-lg font-medium text-7FA1C3">Answer:</label>
+              <textarea
+                id="wordLimit"
+                required
+                onChange={(e) => setAnswer(e.target.value)}
+                className="w-full p-2 border border-7FA1C3 rounded-md focus:outline-none focus:ring-2 focus:ring-6482AD"
+                rows="10"
+              ></textarea>
+
             </div>
           )}
         </div>
