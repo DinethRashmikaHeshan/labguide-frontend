@@ -65,17 +65,19 @@ function Questions() {
 
                         {activeIndex === index && (
                             <div className={`bg-F5EDED p-4 border border-7FA1C3`}>
-                                <div className="flex flex-col md:flex-row md:space-x-6">
+                                {/* <div className="flex flex-col md:flex-row md:space-x-6">
                                     <div className="flex-1">
                                         <label className="font-medium text-lg text-7FA1C3">Question:</label>
                                         <p className="text-gray-700 text-xl">{question.question}</p>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 {question.questionType === 'SingleChoiceQuestion' && (
                                     <div>
                                         <label className="font-medium text-lg text-7FA1C3">Options:</label>
                                         <p className="text-gray-700 text-xl">{question.options.join(', ')}</p>
+                                        <label className="font-medium text-lg text-7FA1C3">Answer:</label>
+                                        <p className="text-gray-700 text-xl">{question.correctAnswer}</p>
                                     </div>
                                 )}
 
@@ -83,6 +85,8 @@ function Questions() {
                                     <div>
                                         <label className="font-medium text-lg text-7FA1C3">Options:</label>
                                         <p className="text-gray-700 text-xl">{question.options.join(', ')}</p>
+                                        <label className="font-medium text-lg text-7FA1C3">Answers:</label>
+                                        <p className="text-gray-700 text-xl">{question.correctAnswers.join(', ')}</p>
                                     </div>
                                 )}
 
@@ -90,17 +94,18 @@ function Questions() {
                                     <div>
                                         <label className="font-medium text-lg text-7FA1C3">Word Limit:</label>
                                         <p className="text-gray-700 text-xl">{question.wordLimit}</p>
-                                    </div>
-                                )}
-
-                                <div>
-                                    <label className="font-medium text-lg text-7FA1C3">Answer:</label>
+                                        <label className="font-medium text-lg text-7FA1C3">Answer:</label>
                                     <textarea
                                         className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xl"
                                         rows="10"
                                         value={question.answer}
                                         readOnly
                                     ></textarea>
+                                    </div>
+                                )}
+
+                                <div>
+                                    
                                 </div>
 
                                 <div className="flex justify-between mt-4">
