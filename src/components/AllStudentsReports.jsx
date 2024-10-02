@@ -1,160 +1,141 @@
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import './AllStudentsReports.css'; 
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const AllStudentsReports = () => {
-  const [allLogicalErrors, setAllLogicalErrors] = useState([]);
-  const [groupedErrors, setGroupedErrors] = useState({});
-  const [overallErrorTypeCount, setOverallErrorTypeCount] = useState({});
+    const [allLogicalErrors, setAllLogicalErrors] = useState([]);
+    const [groupedErrors, setGroupedErrors] = useState({});
+    const [overallErrorTypeCount, setOverallErrorTypeCount] = useState({});
+    
+    // Filters state: date, time, and username
+    const [fromDateTime, setFromDateTime] = useState('');
+    const [toDateTime, setToDateTime] = useState('');
+    const [username, setUsername] = useState('');
 
-  useEffect(() => {
-    const fetchAllLogicalErrors = async () => {
-      try {
-        const response = await fetch('http://localhost:5001/api/saveLogicalErrors/getAllLogicalErrors');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const result = await response.json();
+    useEffect(() => {
+        const fetchAllLogicalErrors = async () => {
+            try {
+                const queryParams = new URLSearchParams();
+                if (fromDateTime) queryParams.append('fromDateTime', fromDateTime);
+                if (toDateTime) queryParams.append('toDateTime', toDateTime);
+                if (username) queryParams.append('username', username);
 
-        const errors = result.logicalErrors;
+                const response = await fetch(`http://localhost:5001/api/saveLogicalErrors/getAllLogicalErrors?${queryParams.toString()}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
 
-        // Group errors by student (username)
-        const groupedByStudent = errors.reduce((acc, record) => {
-          const { username, logicalErrors } = record;
-          if (!acc[username]) {
-            acc[username] = [];
-          }
-          acc[username] = acc[username].concat(logicalErrors);
-          return acc;
-        }, {});
+                const result = await response.json();
+                const errors = result.logicalErrors;
 
-        setGroupedErrors(groupedByStudent);
+                // Group errors by student username
+                const groupedByStudent = errors.reduce((acc, record) => {
+                    const { username, logicalErrors } = record;
+                    if (!acc[username]) {
+                        acc[username] = [];
+                    }
+                    acc[username] = acc[username].concat(logicalErrors);
+                    return acc;
+                }, {});
 
-        // Calculate overall error type count
-        const allErrors = errors.flatMap(record => record.logicalErrors);
-        setAllLogicalErrors(allErrors);
+                setGroupedErrors(groupedByStudent);
 
-        const typeCount = allErrors.reduce((acc, error) => {
-          acc[error.category] = (acc[error.category] || 0) + 1;
-          return acc;
-        }, {});
-        setOverallErrorTypeCount(typeCount);
-      } catch (error) {
-        console.error('Error fetching all logical errors:', error);
-      }
-    };
+                // Calculate overall error type count
+                const allErrors = errors.flatMap(record => record.logicalErrors);
+                setAllLogicalErrors(allErrors);
 
-    fetchAllLogicalErrors();
-  }, []);
+                const typeCount = allErrors.reduce((acc, error) => {
+                    acc[error.type] = acc[error.type] || {};
+                    acc[error.type][error.category] = (acc[error.type][error.category] || 0) + 1;
+                    return acc;
+                }, {});
 
-  // Prepare data for Pie Chart (Overall Error Distribution)
-  const pieChartData = {
-    labels: Object.keys(overallErrorTypeCount),
-    datasets: [
-      {
-        label: 'Overall Logical Errors by Type',
-        data: Object.values(overallErrorTypeCount),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.6)',
-          'rgba(54, 162, 235, 0.6)',
-          'rgba(255, 206, 86, 0.6)',
-          'rgba(75, 192, 192, 0.6)',
-          'rgba(153, 102, 255, 0.6)',
-          'rgba(255, 159, 64, 0.6)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+                setOverallErrorTypeCount(typeCount);
+            } catch (error) {
+                console.error('Error fetching all logical errors:', error);
+            }
+        };
 
-  return (
-    <div>
-      <h2>All Students Logical Errors Report</h2>
+        fetchAllLogicalErrors();
+    }, [fromDateTime, toDateTime, username]); // Re-fetch data on filter change
 
-      {/* Overall Reports Section */}
-      <section>
-        <h3>Overall Logical Error Distribution</h3>
-        {allLogicalErrors.length === 0 ? (
-          <p>No logical errors found across all students.</p>
-        ) : (
-          <div style={{ maxWidth: '400px', margin: '0 auto', marginTop: '20px' }}>
-            <Pie data={pieChartData} />
-          </div>
-        )}
-      </section>
+    return (
+        <div className="report-container">
+            <h2>Logical Errors Report: All Students</h2>
 
-      {/* Individual Student Reports Section */}
-      <section style={{ marginTop: '40px' }}>
-        <h3>Individual Student Reports</h3>
-        {Object.keys(groupedErrors).length === 0 ? (
-          <p>No individual student reports available.</p>
-        ) : (
-          <div>
-            {Object.entries(groupedErrors).map(([username, errors], index) => {
-              const studentErrorCount = errors.reduce((acc, error) => {
-                acc[error.category] = (acc[error.category] || 0) + 1;
-                return acc;
-              }, {});
+            {/* Filters Section */}
+            <div className="filters">
+                <input
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <input
+                    type="datetime-local"
+                    placeholder="From Date and Time"
+                    value={fromDateTime}
+                    onChange={(e) => setFromDateTime(e.target.value)}
+                />
+                <input
+                    type="datetime-local"
+                    placeholder="To Date and Time"
+                    value={toDateTime}
+                    onChange={(e) => setToDateTime(e.target.value)}
+                />
+            </div>
 
-              const studentPieData = {
-                labels: Object.keys(studentErrorCount),
-                datasets: [
-                  {
-                    label: `Logical Errors for ${username}`,
-                    data: Object.values(studentErrorCount),
-                    backgroundColor: [
-                      'rgba(255, 99, 132, 0.6)',
-                      'rgba(54, 162, 235, 0.6)',
-                      'rgba(255, 206, 86, 0.6)',
-                      'rgba(75, 192, 192, 0.6)',
-                      'rgba(153, 102, 255, 0.6)',
-                      'rgba(255, 159, 64, 0.6)',
-                    ],
-                    borderColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)',
-                      'rgba(255, 159, 64, 1)',
-                    ],
-                    borderWidth: 1,
-                  },
-                ],
-              };
+            {/* Overall Reports Section */}
+            <section>
+                <h3>Distribution of Logical Errors by Type</h3>
+                {Object.entries(overallErrorTypeCount).length === 0 ? (
+                    <p>No logical errors recorded for the specified criteria.</p>
+                ) : (
+                    <div className="charts-container">
+                        {Object.entries(overallErrorTypeCount).map(([errorType, categoryCounts], index) => {
+                            const pieData = {
+                                labels: Object.keys(categoryCounts),
+                                datasets: [
+                                    {
+                                        label: `Error Type: ${errorType}`,
+                                        data: Object.values(categoryCounts),
+                                        backgroundColor: [
+                                            'rgba(255, 99, 132, 0.6)',
+                                            'rgba(54, 162, 235, 0.6)',
+                                            'rgba(255, 206, 86, 0.6)',
+                                            'rgba(75, 192, 192, 0.6)',
+                                            'rgba(153, 102, 255, 0.6)',
+                                            'rgba(255, 159, 64, 0.6)',
+                                        ],
+                                        borderColor: [
+                                            'rgba(255, 99, 132, 1)',
+                                            'rgba(54, 162, 235, 1)',
+                                            'rgba(255, 206, 86, 1)',
+                                            'rgba(75, 192, 192, 1)',
+                                            'rgba(153, 102, 255, 1)',
+                                            'rgba(255, 159, 64, 1)',
+                                        ],
+                                        borderWidth: 1,
+                                    },
+                                ],
+                            };
 
-              return (
-                <div key={index} style={{ marginBottom: '40px' }}>
-                  <h4>Student: {username}</h4>
-                  <ul>
-                    {errors.map((error, idx) => (
-                      <li key={idx}>
-                        <strong>Type:</strong> {error.type} | <strong>Category:</strong> {error.category} | <strong>Line:</strong> {error.line} | <strong>Message:</strong> {error.message}
-                      </li>
-                    ))}
-                  </ul>
-                  <div style={{ maxWidth: '400px', margin: '0 auto', marginTop: '20px' }}>
-                    <Pie data={studentPieData} />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </section>
-    </div>
-  );
+                            return (
+                                <div key={index} className="chart-item">
+                                    <h4>{`Error Type: ${errorType}`}</h4>
+                                    <Pie data={pieData} />
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </section>
+        </div>
+    );
 };
 
 export default AllStudentsReports;
