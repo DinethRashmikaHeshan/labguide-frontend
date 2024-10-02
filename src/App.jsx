@@ -7,6 +7,8 @@ import Signup from './components/Signup'; // Import Signup component
 import LogicalErrorsReport from './components/LogicalErrorsReport'; // Import the new report component
 import LecturerDashboard from './components/LecturerDashboard';
 import AllStudentsReports from './components/AllStudentsReports';
+import SuggestionForm from './components/SuggestionForm';
+
 
 
 function App() {
@@ -38,6 +40,7 @@ function App() {
           <Route path="/report" element={<LogicalErrorsReport username={username} />} /> {/* New report route */}
           <Route path="/lecturer-dashboard" element={<LecturerDashboard />} />
           <Route path="/all-students-reports" element={<AllStudentsReports />} />
+          <Route path="/suggestions" element={<SuggestionForm/>} />
           <Route path="/" element={<Navigate to="/login" />} />
         </Routes>
       </div>

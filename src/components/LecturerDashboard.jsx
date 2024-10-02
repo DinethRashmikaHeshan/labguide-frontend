@@ -8,6 +8,9 @@ const LecturerDashboard = () => {
       <Link to="/all-students-reports">
         <button>View All Students' Logical Error Reports</button>
       </Link>
+      <Link to="/suggestions">
+        <button>Add Suggestions for Error Scenarios</button>
+      </Link>
     </div>
   );
 };

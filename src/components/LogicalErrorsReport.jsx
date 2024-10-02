@@ -9,6 +9,9 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const LogicalErrorsReport = ({ username }) => {
   const [logicalErrors, setLogicalErrors] = useState([]);
   const [groupedErrors, setGroupedErrors] = useState({});
+  const [errorFrequency, setErrorFrequency] = useState({});
+  const [suggestions, setSuggestions] = useState({});
+  const [userSuggestions, setUserSuggestions] = useState({}); // For recommended links
   const [fromDate, setFromDate] = useState('');
 
   useEffect(() => {
@@ -20,27 +23,58 @@ const LogicalErrorsReport = ({ username }) => {
         }
         const result = await response.json();
 
-        // Flatten logical errors array from each fetched record
         const allLogicalErrors = result.logicalErrors.flatMap(record => record.logicalErrors);
         setLogicalErrors(allLogicalErrors);
 
-        // Group errors by type and then count occurrences of categories within each type
-        const groupedByType = allLogicalErrors.reduce((acc, error) => {
+        const groupedByTypeAndCategory = allLogicalErrors.reduce((acc, error) => {
           if (!acc[error.type]) {
             acc[error.type] = {};
           }
           acc[error.type][error.category] = (acc[error.type][error.category] || 0) + 1;
           return acc;
         }, {});
+        setGroupedErrors(groupedByTypeAndCategory);
 
-        setGroupedErrors(groupedByType);
+        const frequencyCount = allLogicalErrors.reduce((acc, error) => {
+          const key = `${error.type} - ${error.category}`;
+          acc[key] = (acc[key] || 0) + 1;
+          return acc;
+        }, {});
+        setErrorFrequency(frequencyCount);
+
+        const fetchSuggestions = async () => {
+          const fetchedSuggestions = {};
+          const userSpecificSuggestions = {};
+          for (const [key] of Object.entries(frequencyCount)) {
+            const [errorType, category] = key.split(' - ');
+
+            try {
+              const response = await fetch(`http://localhost:5001/api/errorSuggestions/${errorType}/${category}`);
+              if (response.ok) {
+                const { supportiveLink } = await response.json();
+                fetchedSuggestions[key] = supportiveLink;
+
+                // For user-specific errors only
+                userSpecificSuggestions[key] = supportiveLink;
+              } else {
+                fetchedSuggestions[key] = 'No link found';
+              }
+            } catch (error) {
+              console.error('Error fetching suggestion:', error);
+            }
+          }
+          setSuggestions(fetchedSuggestions);
+          setUserSuggestions(userSpecificSuggestions); // Store user-specific suggestions
+        };
+
+        fetchSuggestions();
       } catch (error) {
         console.error('Error fetching logical errors:', error);
       }
     };
 
     fetchLogicalErrors();
-  }, [username, fromDate]); // Add fromDate as a dependency
+  }, [username, fromDate]);
 
   // Generate pie chart data for each error type
   const generatePieChartData = (errorTypeData) => {
@@ -97,7 +131,7 @@ const LogicalErrorsReport = ({ username }) => {
         </div>
       )}
 
-      {logicalErrors.length === 0 ? (
+      {/* {logicalErrors.length === 0 ? (
         <p className="no-errors-message">No logical errors found.</p>
       ) : (
         <div className="error-list">
@@ -110,7 +144,46 @@ const LogicalErrorsReport = ({ username }) => {
             </div>
           ))}
         </div>
-      )}
+      )} */}
+
+      {/* Pattern Recognition Section */}
+      <section className="pattern-recognition-section">
+        <h2>Pattern Recognition</h2>
+        {Object.keys(errorFrequency).length > 0 ? (
+          <div className="frequency-list">
+            <h3>Error Type & Category Frequency </h3>
+            <ul>
+              {Object.entries(errorFrequency).map(([key, count], index) => (
+                <li key={index}>
+                  {key}: {count} occurrences
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <p>No error frequency data available.</p>
+        )}
+      </section>
+
+      {/* Recommended Links Section */}
+      <section className="recommended-links-section">
+        <h2>Recommended Links</h2>
+        <div className="cards-container">
+          {Object.keys(userSuggestions).length > 0 ? (
+            Object.entries(userSuggestions).map(([key, link], index) => (
+              <div className="suggestion-card" key={index}>
+                <h3>{key}</h3>
+                <p>
+                  <strong>Link:</strong> 
+                  <a href={link} target="_blank" rel="noopener noreferrer">{link}</a>
+                </p>
+              </div>
+            ))
+          ) : (
+            <p>No recommended links found for your errors.</p>
+          )}
+        </div>
+      </section>
     </div>
   );
 };
