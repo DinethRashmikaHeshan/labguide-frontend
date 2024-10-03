@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import ErrorLineGraph from './ErrorLineGraph'; // Import the ErrorLineGraph component
 import './LogicalErrorsReport.css'; // Include the CSS file for styling
 
 // Register required Chart.js components
@@ -184,6 +185,9 @@ const LogicalErrorsReport = ({ username }) => {
           )}
         </div>
       </section>
+
+      {/* Display the ErrorLineGraph component with username and fromDate props */}
+      <ErrorLineGraph username={username}  />
     </div>
   );
 };

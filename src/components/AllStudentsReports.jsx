@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import './AllStudentsReports.css'; 
+import AllErrorLineGraph from './AllErrorLineGraph'; // Import the ErrorLineGraph component
+
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -134,6 +136,9 @@ const AllStudentsReports = () => {
                     </div>
                 )}
             </section>
+
+            <AllErrorLineGraph  />
+
         </div>
     );
 };

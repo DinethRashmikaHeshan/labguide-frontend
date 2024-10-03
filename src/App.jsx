@@ -8,6 +8,9 @@ import LogicalErrorsReport from './components/LogicalErrorsReport'; // Import th
 import LecturerDashboard from './components/LecturerDashboard';
 import AllStudentsReports from './components/AllStudentsReports';
 import SuggestionForm from './components/SuggestionForm';
+import ErrorLineGraph from './components/ErrorLineGraph';
+import AllErrorLineGraph from './components/AllErrorLineGraph';
+
 
 
 
@@ -41,6 +44,8 @@ function App() {
           <Route path="/lecturer-dashboard" element={<LecturerDashboard />} />
           <Route path="/all-students-reports" element={<AllStudentsReports />} />
           <Route path="/suggestions" element={<SuggestionForm/>} />
+          <Route path="/errorLineGraph" element={<ErrorLineGraph/>} />
+          <Route path="/allEerrorLineGraph" element={<AllErrorLineGraph/>} />
           <Route path="/" element={<Navigate to="/login" />} />
         </Routes>
       </div>
