@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Heading, Input, FormControl, FormLabel, Text, Link, VStack, useToast } from '@chakra-ui/react';
+import { Box, Button, Heading, Input, FormControl, FormLabel, Text, Link, VStack, useToast, Switch } from '@chakra-ui/react';
 
 const Signup = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isInstructor, setIsInstructor] = useState(false); // State for instructor toggle
   const navigate = useNavigate(); // Hook to navigate
   const toast = useToast(); // Chakra UI toast for feedback
 
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/api/auth/signup', { username, password });
+      await axios.post('http://localhost:3000/api/auth/signup', { username, password, isInstructor }); // Include isInstructor
       toast({
         title: "Signup successful!",
         description: "You can now log in.",
@@ -78,6 +79,18 @@ const Signup = () => {
                 color="white"
                 _placeholder={{ color: "gray.400" }}  // Lighter placeholder color
               />
+            </FormControl>
+
+            <FormControl id="isInstructor">
+              <FormLabel>
+                <Text as="span">Are you an instructor?</Text>
+                <Switch 
+                  colorScheme="teal" 
+                  isChecked={isInstructor} 
+                  onChange={() => setIsInstructor(!isInstructor)} 
+                  ml={2}
+                />
+              </FormLabel>
             </FormControl>
 
             <Button 
