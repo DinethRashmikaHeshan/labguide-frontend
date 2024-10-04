@@ -27,6 +27,9 @@ import AllErrorLineGraph from "./components/AllErrorLineGraph";
 import CodeEditor from "./visualRepresentation/CodeEditor";
 import CodeListPage from "./visualRepresentation/CodeListPage";
 
+import HintManager from "./HintingManagement/HintManager";
+import HintingManagement from "./HintingManagement/HinintingManagement";
+
 function App() {
   const [token, setToken] = useState(null);
   const [username, setUsername] = useState("");
@@ -96,6 +99,7 @@ function App() {
           <Route path="/codelist" element={<CodeListPage />} />
           <Route path="/code/new" element={<CodeEditor />} />
           <Route path="/code/:id" element={<CodeEditor />} />
+          <HintingManagement />
         </Routes>
       </BrowserRouter>
     </div>
