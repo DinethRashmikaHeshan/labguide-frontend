@@ -179,6 +179,16 @@ const CodeListPage = ({ username, userId }) => {
                 </a>
               </li>
             </Link>
+            <Link to={"/report"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Report
+                </a>
+              </li>
+            </Link>
             <li>
               <a
                 href="#contact"
@@ -235,6 +245,18 @@ const CodeListPage = ({ username, userId }) => {
                   {code.title}
                 </Text>
                 <HStack>
+                <Button
+                    leftIcon={<EditIcon />}
+                    colorScheme="yellow"
+                    aria-label="Edit Code"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/code/${code._id}/${userId}`);
+                    }}
+                  >
+                    Report
+                  </Button>
                   <Button
                     leftIcon={<EditIcon />}
                     colorScheme="yellow"

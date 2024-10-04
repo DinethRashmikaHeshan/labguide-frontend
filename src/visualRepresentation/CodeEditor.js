@@ -128,6 +128,16 @@ const CodeEditor = ({ username, userId }) => {
                 </a>
               </li>
             </Link>
+            <Link to={"/report"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Report
+                </a>
+              </li>
+            </Link>
             <li>
               <a
                 href="#contact"
