@@ -5,7 +5,7 @@ import LanguageSelector from "./LanguageSelector";
 import { CODE_SNIPPETS } from "../constants";
 import Output from "./Output";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 const CodeEditor = () => {
   const { id } = useParams();
@@ -76,7 +76,7 @@ const CodeEditor = () => {
           language,
         });
       }
-      navigate("/");
+      navigate("/codelist");
     } catch (error) {
       console.error("Error saving code:", error);
       toast({
@@ -91,37 +91,101 @@ const CodeEditor = () => {
   };
 
   return (
-    <Box>
-      <HStack spacing={4}>
-        <Box w="50%">
-          <Input
-            placeholder="Enter title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            mb={4}
-          />
-          <LanguageSelector language={language} onSelect={onSelect} />
-          <Editor
-            height="75vh"
-            theme="vs-dark"
-            language={language}
-            defaultValue={id === "new" ? "" : CODE_SNIPPETS[language]}
-            onMount={onMount}
-            value={value}
-            onChange={(value) => setValue(value)}
-          />
-          <Button
-            variant="outline"
-            colorScheme="blue"
-            mt={4}
-            onClick={saveCode}
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="flex justify-between items-center p-6 bg-gray-900 text-white shadow-lg transition duration-300">
+        <h1 className="text-2xl font-extrabold">Programming Assistant</h1>
+        <nav>
+          <ul className="flex space-x-6">
+            <Link to={"./../"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Home
+                </a>
+              </li>
+            </Link>
+            <li>
+              <a
+                href="#features"
+                className="hover:text-green-400 transition duration-200"
+              >
+                Features
+              </a>
+            </li>
+            <Link to={"/test"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Exams
+                </a>
+              </li>
+            </Link>
+            <li>
+              <a
+                href="#contact"
+                className="hover:text-green-400 transition duration-200"
+              >
+                Contact
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <Box minH="100vh" bg="0f0a19" color="gray.500" px={6} py={8}>
+        <HStack spacing={4}>
+          <Box w="50%">
+            <Input
+              placeholder="Enter title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              mb={4}
+            />
+            <LanguageSelector language={language} onSelect={onSelect} />
+            <Editor
+              height="75vh"
+              theme="vs-dark"
+              language={language}
+              defaultValue={id === "new" ? "" : CODE_SNIPPETS[language]}
+              onMount={onMount}
+              value={value}
+              onChange={(value) => setValue(value)}
+            />
+            <Button
+              variant="outline"
+              colorScheme="blue"
+              mt={4}
+              onClick={saveCode}
+            >
+              Save Code
+            </Button>
+          </Box>
+          <Output editorRef={editorRef} language={language} />
+        </HStack>
+      </Box>
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white text-center p-4">
+        <p>&copy; 2024 Programming Assistant. All rights reserved.</p>
+        <div className="flex justify-center space-x-4 mt-2">
+          <a
+            href="/privacy"
+            className="text-gray-400 hover:underline transition duration-200"
           >
-            Save Code
-          </Button>
-        </Box>
-        <Output editorRef={editorRef} language={language} />
-      </HStack>
-    </Box>
+            Privacy Policy
+          </a>
+          <a
+            href="/terms"
+            className="text-gray-400 hover:underline transition duration-200"
+          >
+            Terms of Service
+          </a>
+        </div>
+      </footer>
+    </div>
   );
 };
 

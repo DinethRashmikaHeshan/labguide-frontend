@@ -20,7 +20,7 @@ import {
   DownloadIcon,
   SearchIcon,
 } from "@chakra-ui/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const CodeListPage = () => {
   const [codes, setCodes] = useState([]);
@@ -143,92 +143,156 @@ const CodeListPage = () => {
   if (error) return <Text>{error}</Text>;
 
   return (
-    <Box p={4}>
-      <HStack justifyContent="space-between" mb={4}>
-        <Text fontSize="2xl" fontWeight="bold">
-          Saved Codes
-        </Text>
-        <Button
-          colorScheme="blue"
-          leftIcon={<AddIcon />}
-          onClick={() => navigate("/code/new")}
-        >
-          Create New Code
-        </Button>
-      </HStack>
-
-      {/* Custom Search Bar */}
-      <InputGroup mb={4}>
-        <Input
-          placeholder="Search codes by title..."
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          borderColor="gray.300"
-          _hover={{ borderColor: "gray.400" }}
-          focusBorderColor="blue.500"
-          boxShadow="sm"
-        />
-        <InputRightElement pointerEvents="none">
-          <SearchIcon color="gray.500" />
-        </InputRightElement>
-      </InputGroup>
-
-      <VStack spacing={4} align="stretch">
-        {filteredCodes.map((code) => (
-          <Box
-            key={code._id}
-            p={4}
-            borderWidth="1px"
-            borderRadius="lg"
-            boxShadow="md"
-            _hover={{ boxShadow: "lg", cursor: "pointer" }}
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="flex justify-between items-center p-6 bg-gray-900 text-white shadow-lg transition duration-300">
+        <h1 className="text-2xl font-extrabold">Programming Assistant</h1>
+        <nav>
+          <ul className="flex space-x-6">
+            <Link to={"./../"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Home
+                </a>
+              </li>
+            </Link>
+            <li>
+              <a
+                href="#features"
+                className="hover:text-green-400 transition duration-200"
+              >
+                Features
+              </a>
+            </li>
+            <Link to={"/test"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Exams
+                </a>
+              </li>
+            </Link>
+            <li>
+              <a
+                href="#contact"
+                className="hover:text-green-400 transition duration-200"
+              >
+                Contact
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <Box p={4}>
+        <HStack justifyContent="space-between" mb={4}>
+          <Text fontSize="2xl" fontWeight="bold">
+            Saved Codes
+          </Text>
+          <Button
+            colorScheme="blue"
+            leftIcon={<AddIcon />}
+            onClick={() => navigate("/code/new")}
           >
-            <HStack justifyContent="space-between">
-              <Text fontSize="lg" fontWeight="semibold">
-                {code.title}
-              </Text>
-              <HStack>
-                <Button
-                  leftIcon={<EditIcon />}
-                  colorScheme="yellow"
-                  aria-label="Edit Code"
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`/code/${code._id}`);
-                  }}
-                >
-                  Edit
-                </Button>
-                <Button
-                  leftIcon={<DeleteIcon />}
-                  colorScheme="red"
-                  aria-label="Delete Code"
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    deleteCode(code._id);
-                  }}
-                >
-                  Delete
-                </Button>
-              </HStack>
-            </HStack>
-          </Box>
-        ))}
-      </VStack>
+            Create New Code
+          </Button>
+        </HStack>
 
-      {/* Move the Generate PDF Button below the code list and right align */}
-      <HStack justifyContent="flex-end" mt={8} mr={4}>
-        <Button
-          leftIcon={<DownloadIcon />}
-          colorScheme="green"
-          onClick={() => generatePDF(filteredCodes)}
-        >
-          Generate PDF
-        </Button>
-      </HStack>
-    </Box>
+        {/* Custom Search Bar */}
+        <InputGroup mb={4}>
+          <Input
+            placeholder="Search codes by title..."
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            borderColor="gray.300"
+            _hover={{ borderColor: "gray.400" }}
+            focusBorderColor="blue.500"
+            boxShadow="sm"
+          />
+          <InputRightElement pointerEvents="none">
+            <SearchIcon color="gray.500" />
+          </InputRightElement>
+        </InputGroup>
+
+        <VStack spacing={4} align="stretch">
+          {filteredCodes.map((code) => (
+            <Box
+              key={code._id}
+              p={4}
+              borderWidth="1px"
+              borderRadius="lg"
+              boxShadow="md"
+              _hover={{ boxShadow: "lg", cursor: "pointer" }}
+            >
+              <HStack justifyContent="space-between">
+                <Text fontSize="lg" fontWeight="semibold">
+                  {code.title}
+                </Text>
+                <HStack>
+                  <Button
+                    leftIcon={<EditIcon />}
+                    colorScheme="yellow"
+                    aria-label="Edit Code"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/code/${code._id}`);
+                    }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    leftIcon={<DeleteIcon />}
+                    colorScheme="red"
+                    aria-label="Delete Code"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteCode(code._id);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </HStack>
+              </HStack>
+            </Box>
+          ))}
+        </VStack>
+
+        {/* Move the Generate PDF Button below the code list and right align */}
+        <HStack justifyContent="flex-end" mt={8} mr={4}>
+          <Button
+            leftIcon={<DownloadIcon />}
+            colorScheme="green"
+            onClick={() => generatePDF(filteredCodes)}
+          >
+            Generate PDF
+          </Button>
+        </HStack>
+      </Box>
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white text-center p-4">
+        <p>&copy; 2024 Programming Assistant. All rights reserved.</p>
+        <div className="flex justify-center space-x-4 mt-2">
+          <a
+            href="/privacy"
+            className="text-gray-400 hover:underline transition duration-200"
+          >
+            Privacy Policy
+          </a>
+          <a
+            href="/terms"
+            className="text-gray-400 hover:underline transition duration-200"
+          >
+            Terms of Service
+          </a>
+        </div>
+      </footer>
+    </div>
   );
 };
 
