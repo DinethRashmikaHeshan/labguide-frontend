@@ -33,7 +33,9 @@ const CodeListPage = ({ username, userId }) => {
   useEffect(() => {
     const fetchCodes = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/codes");
+        const response = await axios.get(
+          `http://localhost:3000/api/codes/${userId}`
+        );
         setCodes(response.data);
       } catch (error) {
         setError("Failed to fetch codes. Please try again later.");
@@ -146,10 +148,10 @@ const CodeListPage = ({ username, userId }) => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="flex justify-between items-center p-6 bg-gray-900 text-white shadow-lg transition duration-300">
-        <h1 className="text-2xl font-extrabold">Programming Assistant</h1>
+        <h1 className="text-2xl font-extrabold">&lt;Lab Guide/&gt;</h1>
         <nav>
           <ul className="flex space-x-6">
-            <Link to={"./../"}>
+            <Link to={"/home"}>
               <li>
                 <a
                   href="#features"
@@ -159,14 +161,7 @@ const CodeListPage = ({ username, userId }) => {
                 </a>
               </li>
             </Link>
-            <li>
-              <a
-                href="#features"
-                className="hover:text-green-400 transition duration-200"
-              >
-                Features
-              </a>
-            </li>
+
             <Link to={"/test"}>
               <li>
                 <a
@@ -177,17 +172,30 @@ const CodeListPage = ({ username, userId }) => {
                 </a>
               </li>
             </Link>
-            <li>
-              <a
-                href="#contact"
-                className="hover:text-green-400 transition duration-200"
-              >
-                Contact
-              </a>
-            </li>
+            <Link to={"/report"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Report
+                </a>
+              </li>
+            </Link>
+            <Link to={"/code/:userId"}>
+              <li>
+                <a
+                  href="#mycodes"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  My Codes
+                </a>
+              </li>
+            </Link>
           </ul>
         </nav>
       </header>
+
       <Box p={4}>
         <HStack justifyContent="space-between" mb={4}>
           <Text fontSize="2xl" fontWeight="bold">
@@ -240,7 +248,19 @@ const CodeListPage = ({ username, userId }) => {
                     size="sm"
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigate(`/code/${code._id}`);
+                      navigate(`/code/${code._id}/${userId}`);
+                    }}
+                  >
+                    Report
+                  </Button>
+                  <Button
+                    leftIcon={<EditIcon />}
+                    colorScheme="yellow"
+                    aria-label="Edit Code"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/code/${code._id}/${userId}`);
                     }}
                   >
                     Edit

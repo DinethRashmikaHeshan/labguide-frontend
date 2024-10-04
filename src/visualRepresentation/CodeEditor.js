@@ -21,7 +21,7 @@ const CodeEditor = ({ username, userId }) => {
       const fetchCode = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:3000/api/codes/${id}`
+            `http://localhost:3000/api/codes/${id}/${userId}`
           );
           setValue(response.data.code);
           setTitle(response.data.title);
@@ -64,19 +64,22 @@ const CodeEditor = ({ username, userId }) => {
     }
     try {
       if (id && id !== "new") {
-        await axios.put(`http://localhost:3000/api/codes/${id}`, {
-          code,
-          title,
-          language, // Include language in the request
-        });
-      } else {
-        await axios.post("http://localhost:3000/api/codes", {
+        await axios.put(`http://localhost:3000/api/codes/${id}/${userId}`, {
           code,
           title,
           language,
+          // Include language in the request
+        });
+      } else {
+        await axios.post(`http://localhost:3000/api/codes/${userId}`, {
+          code,
+          title,
+          language,
+          userId,
+          username,
         });
       }
-      navigate("/codelist");
+      navigate("/code/:userId");
     } catch (error) {
       console.error("Error saving code:", error);
       toast({
@@ -94,10 +97,10 @@ const CodeEditor = ({ username, userId }) => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="flex justify-between items-center p-6 bg-gray-900 text-white shadow-lg transition duration-300">
-        <h1 className="text-2xl font-extrabold">Programming Assistant</h1>
+        <h1 className="text-2xl font-extrabold">&lt;Lab Guide/&gt;</h1>
         <nav>
           <ul className="flex space-x-6">
-            <Link to={"./../"}>
+            <Link to={"/home"}>
               <li>
                 <a
                   href="#features"
@@ -107,14 +110,7 @@ const CodeEditor = ({ username, userId }) => {
                 </a>
               </li>
             </Link>
-            <li>
-              <a
-                href="#features"
-                className="hover:text-green-400 transition duration-200"
-              >
-                Features
-              </a>
-            </li>
+
             <Link to={"/test"}>
               <li>
                 <a
@@ -125,17 +121,30 @@ const CodeEditor = ({ username, userId }) => {
                 </a>
               </li>
             </Link>
-            <li>
-              <a
-                href="#contact"
-                className="hover:text-green-400 transition duration-200"
-              >
-                Contact
-              </a>
-            </li>
+            <Link to={"/report"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Report
+                </a>
+              </li>
+            </Link>
+            <Link to={"/code/:userId"}>
+              <li>
+                <a
+                  href="#mycodes"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  My Codes
+                </a>
+              </li>
+            </Link>
           </ul>
         </nav>
       </header>
+
       <Box minH="100vh" bg="0f0a19" color="gray.500" px={6} py={8}>
         <HStack spacing={4}>
           <Box w="50%">
@@ -185,10 +194,6 @@ const CodeEditor = ({ username, userId }) => {
           </a>
         </div>
       </footer>
-      {/* Display the username and userId at the bottom */}
-      <div style={{ position: 'fixed', bottom: 0, width: '100%', textAlign: 'center', padding: '10px', background: '#f1f1f1' }}>
-        <p>Logged in as: {username} (ID: {userId})</p>
-      </div>
     </div>
   );
 };
