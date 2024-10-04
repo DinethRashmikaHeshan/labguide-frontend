@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import CodeEditor from "./components/CodeEditor";
-import CodeListPage from "./components/CodeListPage";
+import CodeEditor from "./visualRepresentation/CodeEditor";
+import CodeListPage from "./visualRepresentation/CodeListPage";
 import "./App.css";
 
 function App() {
