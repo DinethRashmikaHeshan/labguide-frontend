@@ -9,7 +9,7 @@ const ErrorLineGraph = ({ username }) => {
     // Fetch error data from the backend for a specific username
     const fetchErrorData = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/api/getErrorData?username=${username}`);
+        const response = await fetch(`http://localhost:3000/api/getErrorData?username=${username}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

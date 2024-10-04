@@ -18,7 +18,7 @@ const LogicalErrorsReport = ({ username }) => {
   useEffect(() => {
     const fetchLogicalErrors = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/api/saveLogicalErrors/getLogicalErrors?username=${username}&fromDate=${fromDate}`);
+        const response = await fetch(`http://localhost:3000/api/saveLogicalErrors/getLogicalErrors?username=${username}&fromDate=${fromDate}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -50,7 +50,7 @@ const LogicalErrorsReport = ({ username }) => {
             const [errorType, category] = key.split(' - ');
 
             try {
-              const response = await fetch(`http://localhost:5001/api/errorSuggestions/${errorType}/${category}`);
+              const response = await fetch(`http://localhost:3000/api/errorSuggestions/${errorType}/${category}`);
               if (response.ok) {
                 const { supportiveLink } = await response.json();
                 fetchedSuggestions[key] = supportiveLink;

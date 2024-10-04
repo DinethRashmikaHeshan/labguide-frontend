@@ -12,7 +12,7 @@ const SuggestionForm = () => {
     // Fetch all suggestions
     const fetchSuggestions = async () => {
         try {
-            const response = await axios.get('http://localhost:5001/api/errorSuggestions');
+            const response = await axios.get('http://localhost:3000/api/errorSuggestions');
             setSuggestions(response.data);
         } catch (error) {
             console.error("Error fetching suggestions:", error);
@@ -61,14 +61,14 @@ const SuggestionForm = () => {
         try {
             if (editingId) {
                 // Update existing suggestion
-                await axios.put(`http://localhost:5001/api/errorSuggestions/${editingId}`, {
+                await axios.put(`http://localhost:3000/api/errorSuggestions/${editingId}`, {
                     errorType,
                     category,
                     supportiveLink
                 });
             } else {
                 // Create new suggestion
-                await axios.post('http://localhost:5001/api/errorSuggestions', {
+                await axios.post('http://localhost:3000/api/errorSuggestions', {
                     errorType,
                     category,
                     supportiveLink
@@ -90,7 +90,7 @@ const SuggestionForm = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:5001/api/errorSuggestions/${id}`);
+            await axios.delete(`http://localhost:3000/api/errorSuggestions/${id}`);
             fetchSuggestions();
         } catch (error) {
             console.error("Error deleting suggestion:", error);

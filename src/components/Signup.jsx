@@ -10,7 +10,7 @@ const Signup = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5001/api/auth/signup', { username, password });
+      await axios.post('http://localhost:3000/api/auth/signup', { username, password });
       alert('Signup successful! You can now log in.');
       navigate('/login'); // Redirect to login page after signup
     } catch (error) {

@@ -9,7 +9,7 @@ const AllErrorLineGraph = () => {
 
   useEffect(() => {
     // Fetch error data from the backend based on the username filter
-    fetch(`http://localhost:5001/api/getErrorData${username ? `?username=${username}` : ''}`)
+    fetch(`http://localhost:3000/api/getErrorData${username ? `?username=${username}` : ''}`)
       .then(response => response.json())
       .then(data => {
         setErrorData(data);

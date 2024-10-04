@@ -26,7 +26,7 @@ const AllStudentsReports = () => {
                 if (toDateTime) queryParams.append('toDateTime', toDateTime);
                 if (username) queryParams.append('username', username);
 
-                const response = await fetch(`http://localhost:5001/api/saveLogicalErrors/getAllLogicalErrors?${queryParams.toString()}`);
+                const response = await fetch(`http://localhost:3000/api/saveLogicalErrors/getAllLogicalErrors?${queryParams.toString()}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }

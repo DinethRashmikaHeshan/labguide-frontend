@@ -44,7 +44,7 @@ const CodeEditorContainer = ({ username, userId }) => {
   async function checkForErrors() {
     try {
       const code = editorRef.current.getValue();
-      const response = await fetch('http://localhost:5001/api/checkErrors', {
+      const response = await fetch('http://localhost:3000/api/checkErrors', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const CodeEditorContainer = ({ username, userId }) => {
   async function compareWithReference() {
     try {
       const code = editorRef.current.getValue();
-      const response = await fetch('http://localhost:5001/api/compareCode', {
+      const response = await fetch('http://localhost:3000/api/compareCode', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ const CodeEditorContainer = ({ username, userId }) => {
   async function checkLogicalErrors() {
     try {
       const code = editorRef.current.getValue();
-      const response = await fetch('http://localhost:5001/api/checkLogicalErrors', {
+      const response = await fetch('http://localhost:3000/api/checkLogicalErrors', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ const CodeEditorContainer = ({ username, userId }) => {
   // Function to save logical errors
 async function saveLogicalErrors(logicalErrors) {
   try {
-    const response = await fetch('http://localhost:5001/api/saveLogicalErrors', {
+    const response = await fetch('http://localhost:3000/api/saveLogicalErrors', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
