@@ -15,6 +15,17 @@ import ResultTest from './ExamManagement/ResultTest';
 
 import Login from './Login/Login'; // Make sure you have this component
 import Signup from './Login/Signup'; // Import Signup component
+
+import CodeEditorContainer from './components/CodeEditorContainer';
+
+import LogicalErrorsReport from './components/LogicalErrorsReport'; // Import the new report component
+import LecturerDashboard from './components/LecturerDashboard';
+import AllStudentsReports from './components/AllStudentsReports';
+import SuggestionForm from './components/SuggestionForm';
+import ErrorLineGraph from './components/ErrorLineGraph';
+import AllErrorLineGraph from './components/AllErrorLineGraph';
+
+
 function App() {
   const [token, setToken] = useState(null);
   const [username, setUsername] = useState('');
@@ -53,7 +64,14 @@ function App() {
           <Route path='/results' element={<Results />}></Route>
           <Route path='/results/:id' element={<ResultTest />}></Route>
 
-          
+          //special function routes
+          <Route path="/code-editor" element={<CodeEditorContainer username={username} userId={userId} />} />
+          <Route path="/report" element={<LogicalErrorsReport username={username} />} /> {/* New report route */}
+          <Route path="/lecturer-dashboard" element={<LecturerDashboard />} />
+          <Route path="/all-students-reports" element={<AllStudentsReports />} />
+          <Route path="/suggestions" element={<SuggestionForm/>} />
+          <Route path="/errorLineGraph" element={<ErrorLineGraph/>} />
+          <Route path="/allEerrorLineGraph" element={<AllErrorLineGraph/>} />
         </Routes>
       </BrowserRouter>
     </div>
