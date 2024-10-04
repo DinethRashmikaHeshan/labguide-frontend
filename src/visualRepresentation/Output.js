@@ -1,12 +1,17 @@
-import { Box, Button, Text, useToast } from "@chakra-ui/react";
+import { Box, Button, Icon, Text, useToast } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { executeCode } from "../api";
+import axios from "axios";
+import {
+  ViewIcon
+} from "@chakra-ui/icons";
 
 function Output({ editorRef, language }) {
   const toast = useToast();
   const [output, setOutput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); // To store specific error message
 
   const runCode = async () => {
     const sourceCode = editorRef.current?.getValue();
@@ -15,11 +20,32 @@ function Output({ editorRef, language }) {
       setIsLoading(true);
       const { run: result } = await executeCode(language, sourceCode);
       setOutput(result.output.split("\n"));
-      result.stderr ? setIsError(true) : setIsError(false);
+
+      if (result.stderr) {
+        // Extracting the part of the message after "error:"
+        const specificErrorLine = result.stderr.split("\n").find(line => line.includes("error"));
+        if (specificErrorLine) {
+          const specificError = specificErrorLine.split("error:")[1].trim(); 
+          
+          const response = await axios.post(`http://localhost:3000/hint/ai/error-type`, {
+            errorName: specificError,
+          });
+          
+          if (response.data.hints && response.data.hints.length > 0) {
+            setErrorMessage(response.data.hints[0].hintText); // Set the specific error message from hints
+          } else {
+            setErrorMessage("No hints available."); // Fallback message if no hints are returned
+          }
+        }
+        setIsError(true);
+      } else {
+        setIsError(false);
+        setErrorMessage(""); // Clear the error message if no error
+      }
     } catch (error) {
       console.error(error);
       toast({
-        title: "An error occured.",
+        title: "An error occurred.",
         description: error.message || "Unable to run code",
         status: "error",
         duration: 6000,
@@ -43,18 +69,31 @@ function Output({ editorRef, language }) {
       >
         Run Code
       </Button>
+
+      {/* Output Box */}
       <Box
-        height="75vh"
+        height={isError ? "35.5vh" : "75vh"}
         p={2}
         color={isError ? "red.400" : ""}
         border="1px solid"
         borderRadius={4}
         borderColor={isError ? "red.500" : "#333"}
+        mb={isError ? 4 : 0} // Add margin if there's an error message box
       >
         {output
           ? output.map((line, i) => <Text key={i}>{line}</Text>)
           : 'Click "Run Code" to see the output here'}
       </Box>
+
+      {/* Display the specific error message only if there's an error */}
+      {isError && errorMessage && (
+        <Box color="yellow.800" height = "37.5vh" border="1px solid brown" borderRadius={4} p={2}>
+          <Text fontWeight="bold" display="flex" alignItems="center">
+            Hints <Icon as={ViewIcon} ml={2} /> {/* Added ViewIcon next to Hints */}
+          </Text>
+          <Text>{errorMessage}</Text>
+        </Box>
+      )}
     </Box>
   );
 }
