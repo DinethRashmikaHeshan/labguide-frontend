@@ -132,26 +132,37 @@ async function saveLogicalErrors(logicalErrors) {
     console.error('Error saving logical errors:', error);
   }
 }
+const buttonStyle = {
+  margin: '10px',
+  padding: '10px 20px',
+  backgroundColor: '#4CAF50',
+  color: 'white',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer',
+  fontSize: '16px'
+};
+
+const containerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  marginTop: '20px'
+};
 
 
   return (
     <div className='App'>
-      <button onClick={() => setFileName("index.html")}>
-        Switch to index.html
-      </button>
-      <button onClick={() => setFileName("script.c")}>
-        Switch to script.c
-      </button>
-      <button onClick={checkForErrors}>
-        Check for Errors
-      </button>
-      <button onClick={compareWithReference}>
-        Compare with Reference
-      </button>
-      <button onClick={checkLogicalErrors}> {/* Added button for logical errors */}
-        Check for Logical Errors
-      </button>
-      <button onClick={navigateToReport}>Check My Report</button>
+      
+      <button style={buttonStyle} onClick={compareWithReference}>
+          Compare with Reference
+        </button>
+        <button style={buttonStyle} onClick={checkLogicalErrors}>
+          Check for Logical Errors
+        </button>
+        <button style={buttonStyle} onClick={navigateToReport}>
+          Check My Report
+        </button>
       <CodeEditor
         fileName={fileName}
         files={files}

@@ -84,6 +84,16 @@ function Home({ username, userId }) {
                 </a>
               </li>
             </Link>
+            <Link to={"/report"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Report
+                </a>
+              </li>
+            </Link>
             <li>
               <a
                 href="#contact"
@@ -140,7 +150,7 @@ function Home({ username, userId }) {
       >
         <h3 className="text-3xl font-bold mb-4">Try Our Interactive Demo</h3>
         <div className="max-w-3xl mx-auto border p-6 rounded-lg bg-gray-100 shadow-lg transition-shadow duration-300 hover:shadow-xl">
-          <CodeEditor />
+          <CodeEditor username={username} userId={userId}/>
         </div>
       </section>
 

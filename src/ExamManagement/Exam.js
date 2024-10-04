@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { ClipboardDocumentListIcon, ChartBarIcon, DocumentTextIcon, LightBulbIcon } from '@heroicons/react/24/outline'; // Importing Icons
+import { ClipboardDocumentListIcon, ChartBarIcon, DocumentTextIcon, LightBulbIcon,LifebuoyIcon } from '@heroicons/react/24/outline'; // Importing Icons
 
 function Exam() {
     const [exams, setExam] = useState([]);
@@ -67,6 +67,13 @@ function Exam() {
                     >
                         <LightBulbIcon className="h-6 w-6 mr-2" /> {/* Results Icon */}
                         Suggestion links
+                    </Link>
+                    <Link 
+                        to="/hint" 
+                        className="flex items-center text-lg text-[#6482AD] font-bold py-3 px-4 rounded-md hover:bg-[#7FA1C3] hover:text-white transition duration-300"
+                    >
+                        <LifebuoyIcon className="h-7 w-7 mr-2" /> {/* Results Icon */}
+                        Hinting Management
                     </Link>
 
                 </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import { Link } from 'react-router-dom';
-import { ClipboardDocumentListIcon, ChartBarIcon, DocumentTextIcon, LightBulbIcon } from '@heroicons/react/24/outline'; // Importing Icons
+import { ClipboardDocumentListIcon, ChartBarIcon, DocumentTextIcon, LightBulbIcon, LifebuoyIcon } from '@heroicons/react/24/outline'; // Importing Icons
 
 
 const SuggestionForm = () => {
@@ -173,6 +173,13 @@ const SuggestionForm = () => {
                         <LightBulbIcon className="h-6 w-6 mr-2" /> {/* Results Icon */}
                         Suggestion links
                     </Link>
+                    <Link
+                        to="/hint"
+                        className="flex items-center text-lg text-[#6482AD] font-bold py-3 px-4 rounded-md hover:bg-[#7FA1C3] hover:text-white transition duration-300"
+                    >
+                        <LifebuoyIcon className="h-7 w-7 mr-2" /> {/* Results Icon */}
+                        Hinting Management
+                    </Link>
 
                 </div>
             </nav>
@@ -308,60 +315,62 @@ const SuggestionForm = () => {
                                 >
                                     {errorType}
                                 </h4>
-                                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
-                                    <thead>
-                                        <tr>
-                                            <th style={{ border: '1px solid #ccc', padding: '10px', backgroundColor: '#f5f5f5', fontSize: '16px' }}>Category</th>
-                                            <th style={{ border: '1px solid #ccc', padding: '10px', backgroundColor: '#f5f5f5', fontSize: '16px' }}>Supportive Link</th>
-                                            <th style={{ border: '1px solid #ccc', padding: '10px', backgroundColor: '#f5f5f5', fontSize: '16px' }}>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {groupedSuggestions[errorType].map((suggestion) => (
-                                            <tr key={suggestion._id}>
-                                                <td style={{ border: '1px solid #ccc', padding: '10px', fontSize: '15px' }}>{suggestion.category}</td>
-                                                <td style={{ border: '1px solid #ccc', padding: '10px', fontSize: '15px' }}>
-                                                    <a href={suggestion.supportiveLink} target="_blank" rel="noopener noreferrer" style={{ color: '#007BFF' }}>
-                                                        {suggestion.supportiveLink}
-                                                    </a>
-                                                </td>
-                                                <td style={{ border: '1px solid #ccc', padding: '10px' }}>
-                                                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
-                                                        <button
-                                                            onClick={() => handleEdit(suggestion)}
-                                                            style={{
-                                                                padding: '6px 10px',
-                                                                cursor: 'pointer',
-                                                                border: 'none',
-                                                                backgroundColor: '#28a745',
-                                                                color: '#fff',
-                                                                borderRadius: '4px',
-                                                                flex: 1
-                                                            }}
-                                                        >
-                                                            Edit
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDelete(suggestion._id)}
-                                                            style={{
-                                                                padding: '6px 10px',
-                                                                cursor: 'pointer',
-                                                                border: 'none',
-                                                                backgroundColor: '#dc3545',
-                                                                color: '#fff',
-                                                                borderRadius: '4px',
-                                                                flex: 1
-                                                            }}
-                                                        >
-                                                            Delete
-                                                        </button>
-                                                    </div>
-                                                </td>
-
+                                {/* Table container to control overflow */}
+                                <div style={{ overflowX: 'auto' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px', tableLayout: 'fixed' }}>
+                                        <thead>
+                                            <tr>
+                                                <th style={{ border: '1px solid #ccc', padding: '10px', backgroundColor: '#f5f5f5', fontSize: '16px', width: '30%' }}>Category</th>
+                                                <th style={{ border: '1px solid #ccc', padding: '10px', backgroundColor: '#f5f5f5', fontSize: '16px', width: '50%' }}>Supportive Link</th>
+                                                <th style={{ border: '1px solid #ccc', padding: '10px', backgroundColor: '#f5f5f5', fontSize: '16px', width: '20%' }}>Actions</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            {groupedSuggestions[errorType].map((suggestion) => (
+                                                <tr key={suggestion._id}>
+                                                    <td style={{ border: '1px solid #ccc', padding: '10px', fontSize: '15px', wordBreak: 'break-word' }}>{suggestion.category}</td>
+                                                    <td style={{ border: '1px solid #ccc', padding: '10px', fontSize: '15px', wordBreak: 'break-word' }}>
+                                                        <a href={suggestion.supportiveLink} target="_blank" rel="noopener noreferrer" style={{ color: '#007BFF' }}>
+                                                            {suggestion.supportiveLink}
+                                                        </a>
+                                                    </td>
+                                                    <td style={{ border: '1px solid #ccc', padding: '10px' }}>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
+                                                            <button
+                                                                onClick={() => handleEdit(suggestion)}
+                                                                style={{
+                                                                    padding: '6px 10px',
+                                                                    cursor: 'pointer',
+                                                                    border: 'none',
+                                                                    backgroundColor: '#28a745',
+                                                                    color: '#fff',
+                                                                    borderRadius: '4px',
+                                                                    flex: 1
+                                                                }}
+                                                            >
+                                                                Edit
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleDelete(suggestion._id)}
+                                                                style={{
+                                                                    padding: '6px 10px',
+                                                                    cursor: 'pointer',
+                                                                    border: 'none',
+                                                                    backgroundColor: '#dc3545',
+                                                                    color: '#fff',
+                                                                    borderRadius: '4px',
+                                                                    flex: 1
+                                                                }}
+                                                            >
+                                                                Delete
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         ))}
                     </div>
