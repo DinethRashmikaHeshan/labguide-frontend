@@ -4,6 +4,9 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import './AllStudentsReports.css'; 
 import AllErrorLineGraph from './AllErrorLineGraph'; // Import the ErrorLineGraph component
 
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { ClipboardDocumentListIcon, ChartBarIcon, DocumentTextIcon, LightBulbIcon } from '@heroicons/react/24/outline'; // Importing Icons
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -66,8 +69,50 @@ const AllStudentsReports = () => {
     }, [fromDateTime, toDateTime, username]); // Re-fetch data on filter change
 
     return (
-        <div className="report-container">
-            <h2>Logical Errors Report: All Students</h2>
+        <div className="min-h-screen flex bg-gradient-to-r from-[#6482AD] to-[#7FA1C3]">
+
+
+            {/* Fixed Vertical Navigation Bar */}
+            <nav className="bg-white p-6 shadow-lg rounded-lg w-64 h-screen fixed top-0 left-0 overflow-y-auto">
+                <h1 className="text-2xl font-bold text-[#6482AD] mb-6">Instructor Dashboard</h1>
+                <div className="flex flex-col">
+                    <Link 
+                        to="/exams" 
+                        className="flex items-center text-lg text-[#6482AD] font-bold py-3 px-4 rounded-md mb-2 hover:bg-[#7FA1C3] hover:text-white transition duration-300"
+                    >
+                        <ClipboardDocumentListIcon className="h-6 w-6 mr-2" /> {/* Exam Icon */}
+                        Exams
+                    </Link>
+                    <Link 
+                        to="/results" 
+                        className="flex items-center text-lg text-[#6482AD] font-bold py-3 px-4 rounded-md hover:bg-[#7FA1C3] hover:text-white transition duration-300"
+                    >
+                        <ChartBarIcon className="h-6 w-6 mr-2" /> {/* Results Icon */}
+                        Results
+                    </Link>
+                    <Link 
+                        to="/all-students-reports" 
+                        className="flex items-center text-lg text-[#6482AD] font-bold py-3 px-4 rounded-md hover:bg-[#7FA1C3] hover:text-white transition duration-300"
+                    >
+                        <DocumentTextIcon className="h-6 w-6 mr-2" /> {/* Results Icon */}
+                        Student Reports
+                    </Link>
+                    <Link 
+                        to="/suggestions" 
+                        className="flex items-center text-lg text-[#6482AD] font-bold py-3 px-4 rounded-md hover:bg-[#7FA1C3] hover:text-white transition duration-300"
+                    >
+                        <LightBulbIcon className="h-6 w-6 mr-2" /> {/* Results Icon */}
+                        Suggestion links
+                    </Link>
+
+                </div>
+            </nav>
+            <div className="ml-64 p-8 w-full overflow-y-auto" style={{ maxHeight: '100vh' }}>
+            <div className="bg-[#F5EDED] p-8 rounded-lg shadow-lg max-w-3xl mx-auto">
+
+            <h1 className="text-3xl font-bold text-[#6482AD] mb-6">Logical Errors Report: All Students</h1>
+
+            <div className="report-container">
 
             {/* Filters Section */}
             <div className="filters">
@@ -140,6 +185,10 @@ const AllStudentsReports = () => {
             <AllErrorLineGraph  />
 
         </div>
+        </div>
+        </div>
+        </div>
+
     );
 };
 

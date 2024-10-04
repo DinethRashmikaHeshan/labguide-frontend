@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/icons";
 import { useNavigate, Link } from "react-router-dom";
 
-const CodeListPage = () => {
+const CodeListPage = ({ username, userId }) => {
   const [codes, setCodes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { ClipboardDocumentListIcon, ChartBarIcon } from '@heroicons/react/24/outline'; // Importing Icons
+import { ClipboardDocumentListIcon, ChartBarIcon, DocumentTextIcon, LightBulbIcon } from '@heroicons/react/24/outline'; // Importing Icons
 
 function Results() {
     const [exams, setExam] = useState([]);
@@ -38,6 +38,20 @@ function Results() {
                     >
                         <ChartBarIcon className="h-6 w-6 mr-2" /> {/* Results Icon */}
                         Results
+                    </Link>
+                    <Link 
+                        to="/all-students-reports" 
+                        className="flex items-center text-lg text-[#6482AD] font-bold py-3 px-4 rounded-md hover:bg-[#7FA1C3] hover:text-white transition duration-300"
+                    >
+                        <DocumentTextIcon className="h-6 w-6 mr-2" /> {/* Results Icon */}
+                        Student Reports
+                    </Link>
+                    <Link 
+                        to="/suggestions" 
+                        className="flex items-center text-lg text-[#6482AD] font-bold py-3 px-4 rounded-md hover:bg-[#7FA1C3] hover:text-white transition duration-300"
+                    >
+                        <LightBulbIcon className="h-6 w-6 mr-2" /> {/* Results Icon */}
+                        Suggestion links
                     </Link>
                 </div>
             </nav>

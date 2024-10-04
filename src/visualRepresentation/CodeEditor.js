@@ -7,7 +7,7 @@ import Output from "./Output";
 import axios from "axios";
 import { useParams, useNavigate, Link } from "react-router-dom";
 
-const CodeEditor = () => {
+const CodeEditor = ({ username, userId }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
@@ -185,6 +185,10 @@ const CodeEditor = () => {
           </a>
         </div>
       </footer>
+      {/* Display the username and userId at the bottom */}
+      <div style={{ position: 'fixed', bottom: 0, width: '100%', textAlign: 'center', padding: '10px', background: '#f1f1f1' }}>
+        <p>Logged in as: {username} (ID: {userId})</p>
+      </div>
     </div>
   );
 };
