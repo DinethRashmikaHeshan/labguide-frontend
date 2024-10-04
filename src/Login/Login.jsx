@@ -34,7 +34,7 @@ const Login = ({ setToken, setUsername: setParentUsername, setUserId }) => {
       setUserId(user._id);
   
       // Navigate to the code editor page
-      navigate('/code-editor');
+      navigate('/home');
       
     } catch (error) {
       console.error('Login error:', error.response?.data || error.message); // Log the error response

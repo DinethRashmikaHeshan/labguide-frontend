@@ -104,9 +104,11 @@ function Home() {
         <p className="mb-6">
           Get intelligent assistance at every step of your programming journey.
         </p>
-        <button className="mt-4 px-8 py-3 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition duration-300 transform hover:scale-105 hover:shadow-lg">
-          Start Coding
-        </button>
+        <Link to={"/code/new"}>
+          <button className="mt-4 px-8 py-3 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition duration-300 transform hover:scale-105 hover:shadow-lg">
+            Start Coding
+          </button>
+        </Link>
       </section>
 
       {/* Features Overview */}
