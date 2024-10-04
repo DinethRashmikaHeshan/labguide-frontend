@@ -251,6 +251,18 @@ const CodeListPage = ({ username, userId }) => {
                       navigate(`/code/${code._id}/${userId}`);
                     }}
                   >
+                    Report
+                  </Button>
+                  <Button
+                    leftIcon={<EditIcon />}
+                    colorScheme="yellow"
+                    aria-label="Edit Code"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/code/${code._id}/${userId}`);
+                    }}
+                  >
                     Edit
                   </Button>
                   <Button
