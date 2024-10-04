@@ -93,7 +93,7 @@ function App() {
           <Route path="/suggestions" element={<SuggestionForm />} />
           <Route path="/errorLineGraph" element={<ErrorLineGraph />} />
           <Route path="/allEerrorLineGraph" element={<AllErrorLineGraph />} />
-          <Route path="/" element={<CodeListPage />} />
+          <Route path="/codelist" element={<CodeListPage />} />
           <Route path="/code/new" element={<CodeEditor />} />
           <Route path="/code/:id" element={<CodeEditor />} />
         </Routes>
