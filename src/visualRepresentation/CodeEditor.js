@@ -97,7 +97,7 @@ const CodeEditor = () => {
         <h1 className="text-2xl font-extrabold">Programming Assistant</h1>
         <nav>
           <ul className="flex space-x-6">
-            <Link to={"./../"}>
+            <Link to={"/home"}>
               <li>
                 <a
                   href="#features"
