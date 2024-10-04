@@ -21,7 +21,7 @@ const CodeEditor = ({ username, userId }) => {
       const fetchCode = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:3000/api/codes/${id}`
+            `http://localhost:3000/api/codes/${id}/${userId}`
           );
           setValue(response.data.code);
           setTitle(response.data.title);
@@ -64,19 +64,22 @@ const CodeEditor = ({ username, userId }) => {
     }
     try {
       if (id && id !== "new") {
-        await axios.put(`http://localhost:3000/api/codes/${id}`, {
-          code,
-          title,
-          language, // Include language in the request
-        });
-      } else {
-        await axios.post("http://localhost:3000/api/codes", {
+        await axios.put(`http://localhost:3000/api/codes/${id}/${userId}`, {
           code,
           title,
           language,
+          // Include language in the request
+        });
+      } else {
+        await axios.post(`http://localhost:3000/api/codes/${userId}`, {
+          code,
+          title,
+          language,
+          userId,
+          username,
         });
       }
-      navigate("/codelist");
+      navigate("/code/:userId");
     } catch (error) {
       console.error("Error saving code:", error);
       toast({
@@ -186,8 +189,19 @@ const CodeEditor = ({ username, userId }) => {
         </div>
       </footer>
       {/* Display the username and userId at the bottom */}
-      <div style={{ position: 'fixed', bottom: 0, width: '100%', textAlign: 'center', padding: '10px', background: '#f1f1f1' }}>
-        <p>Logged in as: {username} (ID: {userId})</p>
+      <div
+        style={{
+          position: "fixed",
+          bottom: 0,
+          width: "100%",
+          textAlign: "center",
+          padding: "10px",
+          background: "#f1f1f1",
+        }}
+      >
+        <p>
+          Logged in as: {username} (ID: {userId})
+        </p>
       </div>
     </div>
   );

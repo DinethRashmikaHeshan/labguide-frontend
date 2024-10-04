@@ -52,7 +52,10 @@ function App() {
       <BrowserRouter>
         <Routes>
           //Home
-          <Route path="/home" element={<Home username={username} userId={userId}/>}></Route>
+          <Route
+            path="/home"
+            element={<Home username={username} userId={userId} />}
+          ></Route>
           <Route
             path="/"
             element={
@@ -96,9 +99,21 @@ function App() {
           <Route path="/suggestions" element={<SuggestionForm />} />
           <Route path="/errorLineGraph" element={<ErrorLineGraph />} />
           <Route path="/allEerrorLineGraph" element={<AllErrorLineGraph />} />
-          <Route path="/codelist" element={<CodeListPage username={username} userId={userId} />} />
-          <Route path="/code/new" element={<CodeEditor username={username} userId={userId} />}/>} />
-          <Route path="/code/:id" element={<CodeEditor username={username} userId={userId} />}/>} />
+          {/**relevant user all codes */}
+          <Route
+            path="/code/:userId"
+            element={<CodeListPage username={username} userId={userId} />}
+          />
+          {/**relevant user new code */}
+          <Route
+            path="/code/new"
+            element={<CodeEditor username={username} userId={userId} />}
+          />
+          {/**relevant user selected code */}
+          <Route
+            path="/code/:id/:userId"
+            element={<CodeEditor username={username} userId={userId} />}
+          />
           <Route path="/hint" element={<HintingManagement />} />
         </Routes>
       </BrowserRouter>

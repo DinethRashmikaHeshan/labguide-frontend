@@ -33,7 +33,9 @@ const CodeListPage = ({ username, userId }) => {
   useEffect(() => {
     const fetchCodes = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/codes");
+        const response = await axios.get(
+          `http://localhost:3000/api/codes/${userId}`
+        );
         setCodes(response.data);
       } catch (error) {
         setError("Failed to fetch codes. Please try again later.");
@@ -240,7 +242,7 @@ const CodeListPage = ({ username, userId }) => {
                     size="sm"
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigate(`/code/${code._id}`);
+                      navigate(`/code/${code._id}/${userId}`);
                     }}
                   >
                     Edit
