@@ -99,7 +99,7 @@ function App() {
           <Route path="/codelist" element={<CodeListPage />} />
           <Route path="/code/new" element={<CodeEditor />} />
           <Route path="/code/:id" element={<CodeEditor />} />
-          <HintingManagement />
+          <Route path="/hint" element={<HintingManagement />} />
         </Routes>
       </BrowserRouter>
     </div>
