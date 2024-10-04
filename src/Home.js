@@ -40,7 +40,7 @@ const testimonials = [
 ];
 
 // Home component
-function Home() {
+function Home({ username, userId }) {
   const [visible, setVisible] = useState(false);
 
   // Effect to trigger visibility on mount
@@ -209,7 +209,12 @@ function Home() {
           </a>
         </div>
       </footer>
+      {/* Display the username and userId at the bottom */}
+      <div style={{ position: 'fixed', bottom: 0, width: '100%', textAlign: 'center', padding: '10px', background: '#f1f1f1' }}>
+        <p>Logged in as: {username} (ID: {userId})</p>
+      </div>
     </div>
+    
   );
 }
 
