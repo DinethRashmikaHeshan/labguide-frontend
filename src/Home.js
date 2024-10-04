@@ -53,10 +53,10 @@ function Home({ username, userId }) {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="flex justify-between items-center p-6 bg-gray-900 text-white shadow-lg transition duration-300">
-        <h1 className="text-2xl font-extrabold">Programming Assistant</h1>
+        <h1 className="text-2xl font-extrabold">&lt;Lab Guide/&gt;</h1>
         <nav>
           <ul className="flex space-x-6">
-            <Link to={"./../"}>
+            <Link to={"/home"}>
               <li>
                 <a
                   href="#features"
@@ -66,14 +66,7 @@ function Home({ username, userId }) {
                 </a>
               </li>
             </Link>
-            <li>
-              <a
-                href="#features"
-                className="hover:text-green-400 transition duration-200"
-              >
-                Features
-              </a>
-            </li>
+
             <Link to={"/test"}>
               <li>
                 <a
@@ -94,14 +87,16 @@ function Home({ username, userId }) {
                 </a>
               </li>
             </Link>
-            <li>
-              <a
-                href="#contact"
-                className="hover:text-green-400 transition duration-200"
-              >
-                Contact
-              </a>
-            </li>
+            <Link to={"/code/:userId"}>
+              <li>
+                <a
+                  href="#mycodes"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  My Codes
+                </a>
+              </li>
+            </Link>
           </ul>
         </nav>
       </header>
@@ -150,7 +145,7 @@ function Home({ username, userId }) {
       >
         <h3 className="text-3xl font-bold mb-4">Try Our Interactive Demo</h3>
         <div className="max-w-3xl mx-auto border p-6 rounded-lg bg-gray-100 shadow-lg transition-shadow duration-300 hover:shadow-xl">
-          <CodeEditor username={username} userId={userId}/>
+          <CodeEditor username={username} userId={userId} />
         </div>
       </section>
 
@@ -220,11 +215,21 @@ function Home({ username, userId }) {
         </div>
       </footer>
       {/* Display the username and userId at the bottom */}
-      <div style={{ position: 'fixed', bottom: 0, width: '100%', textAlign: 'center', padding: '10px', background: '#f1f1f1' }}>
-        <p>Logged in as: {username} (ID: {userId})</p>
+      <div
+        style={{
+          position: "fixed",
+          bottom: 0,
+          width: "100%",
+          textAlign: "center",
+          padding: "10px",
+          background: "#f1f1f1",
+        }}
+      >
+        <p>
+          Logged in as: {username} (ID: {userId})
+        </p>
       </div>
     </div>
-    
   );
 }
 
