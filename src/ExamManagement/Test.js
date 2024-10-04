@@ -8,6 +8,7 @@ function Test() {
     const [registrationNo, setRegistrationNo] = useState(''); // State for registration number
     const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
     const [selectedExamId, setSelectedExamId] = useState(null); // State to track the selected exam
+    const [searchQuery, setSearchQuery] = useState(''); // State for search query
     const navigate = useNavigate(); // Hook to programmatically navigate
 
     useEffect(() => {
@@ -39,6 +40,11 @@ function Test() {
         setRegistrationNo(''); // Reset the registration number
     };
 
+    // Filter exams based on search query
+    const filteredExams = exams.filter((exam) =>
+        exam.examDetails.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className="min-h-screen flex flex-col bg-gradient-to-r from-[#6482AD] to-[#7FA1C3]">
             {/* Header */}
@@ -58,8 +64,20 @@ function Test() {
             <main className="flex-grow p-8">
                 <div className="bg-[#F5EDED] p-8 rounded-lg shadow-lg max-w-6xl mx-auto">
                     <h2 className="text-3xl font-bold text-[#6482AD] mb-8 text-center">Exams</h2>
+
+                    {/* Search Bar */}
+                    <div className="mb-6">
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search for exams..."
+                            className="w-full p-3 border border-gray-300 rounded-lg"
+                        />
+                    </div>
+
                     <div className="space-y-4">
-                        {exams.map((exam, index) => {
+                        {filteredExams.map((exam, index) => {
                             const currentDate = new Date();
                             const examDate = new Date(exam.eDate);
                             const isPast = examDate < currentDate;
