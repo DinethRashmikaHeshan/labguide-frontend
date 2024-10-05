@@ -21,22 +21,31 @@ function ResultTest() {
         }
     };
 
-    // Function to generate a PDF for the exam results
+    // Function to generate a PDF for the exam attendance
     const generatePDF = () => {
         const doc = new jsPDF();
         doc.setFontSize(18);
-        doc.text('Exam Results', 14, 22);
+        doc.text('Exam Attendance', 14, 22); // Updated text
         
-        const tableColumn = ["Registration No", "Exam Date"];
+        // Define table columns including "Total Questions Answered"
+        const tableColumn = ["Registration No", "Exam Date", "Total Questions Answered"];
         const tableRows = [];
+
+        // Create a Set to count unique registration IDs
+        const uniqueRegistrationNos = new Set();
 
         results.forEach(result => {
             const examData = [
                 result.registrationNo,
-                new Date(result.examDate).toLocaleDateString(), // Format date
+                new Date(result.date).toLocaleDateString(), // Format date
+                result.answers.length // Assuming answers is an array; adjust if needed
             ];
             tableRows.push(examData);
+            uniqueRegistrationNos.add(result.registrationNo); // Add to Set for unique count
         });
+
+        // Calculate total attendance based on unique registration IDs
+        const totalAttendance = uniqueRegistrationNos.size; // Unique count of registration IDs
 
         // Add the table to the PDF
         doc.autoTable({
@@ -45,14 +54,17 @@ function ResultTest() {
             startY: 30,
         });
 
+        // Add total attendance as a new row in the PDF
+        doc.text(`Total Attendance: ${totalAttendance}`, 14, doc.lastAutoTable.finalY + 10);
+        
         // Save the generated PDF
-        doc.save(`exam_results_${examID}.pdf`);
+        doc.save(`exam_attendance_${examID}.pdf`); // Updated filename
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-r from-[#6482AD] to-[#7FA1C3] p-8">
             <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6">
-                <h1 className="text-2xl font-bold text-[#6482AD] mb-4">Exam Results</h1>
+                <h1 className="text-2xl font-bold text-[#6482AD] mb-4">Exam Attendance</h1> {/* Updated heading */}
                 
                 {results.length > 0 ? (
                     <>
@@ -61,6 +73,7 @@ function ResultTest() {
                                 <tr className="bg-[#6482AD] text-white">
                                     <th className="px-4 py-2">Registration No</th>
                                     <th className="px-4 py-2">Exam Date</th>
+                                    <th className="px-4 py-2">Total Questions Answered</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -68,7 +81,10 @@ function ResultTest() {
                                     <tr key={index} className="border-b">
                                         <td className="px-4 py-2 text-center">{result.registrationNo}</td>
                                         <td className="px-4 py-2 text-center">
-                                            {new Date(result.examDate).toLocaleDateString()}
+                                            {new Date(result.date).toLocaleDateString()}
+                                        </td>
+                                        <td className="px-4 py-2 text-center">
+                                            {result.answers.length} {/* Adjust if necessary */}
                                         </td>
                                     </tr>
                                 ))}

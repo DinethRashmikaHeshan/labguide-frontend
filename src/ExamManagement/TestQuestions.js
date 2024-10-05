@@ -6,13 +6,14 @@ function TestQuestions() {
     const { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
-    
+
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(1200); // 20 minutes
     const [answers, setAnswers] = useState({});
     const [showSummary, setShowSummary] = useState(false);
     const [registrationNo, setRegistrationNo] = useState('');
+    const [exam, setExam] = useState({});
+    const [timeLeft, setTimeLeft] = useState(0); // Initialize to 0
 
     // Use effect to set registration number if available
     useEffect(() => {
@@ -21,10 +22,34 @@ function TestQuestions() {
         }
     }, [location.state]);
 
-    // Fetch questions when component mounts
+    // Fetch questions and exam when component mounts
     useEffect(() => {
+        getExam();
         getQuestions();
-        
+    }, []);
+
+    const getExam = async () => {
+        try {
+            const res = await axios.get(`http://localhost:3000/exam/exam/each/${id}`);
+            const fetchedExam = res.data.exam;
+            setExam(fetchedExam);
+            setTimeLeft(fetchedExam.duration * 60); // Set time left in seconds (duration in minutes)
+        } catch (error) {
+            alert("Error: " + error.response.data);
+        }
+    };
+
+    const getQuestions = async () => {
+        try {
+            const res = await axios.get(`http://localhost:3000/exam/exam/${id}`);
+            setQuestions(res.data);
+        } catch (error) {
+            alert("Error: " + (error.response?.data || error.message));
+        }
+    };
+
+    // Timer effect
+    useEffect(() => {
         const timer = setInterval(() => {
             setTimeLeft(prevTime => {
                 if (prevTime <= 0) {
@@ -39,15 +64,6 @@ function TestQuestions() {
         // Cleanup function to clear the interval when the component unmounts
         return () => clearInterval(timer);
     }, []);
-
-    const getQuestions = async () => {
-        try {
-            const res = await axios.get(`http://localhost:3000/exam/exam/${id}`);
-            setQuestions(res.data);
-        } catch (error) {
-            alert("Error: " + (error.response?.data || error.message));
-        }
-    };
 
     const handleAnswerChange = (questionId, questionText, answer) => {
         setAnswers(prevAnswers => ({
@@ -71,8 +87,10 @@ function TestQuestions() {
                 examId: id,
                 registrationNo: registrationNo,
                 answers: formattedAnswers,
+                date: new Date(), // Add current date and time
             });
             console.log('Answers saved successfully:', formattedAnswers);
+            console.log(id,registrationNo,formattedAnswers)
         } catch (error) {
             console.error('Error saving answers:', error.response?.data || error.message);
         }
@@ -207,53 +225,28 @@ function TestQuestions() {
             </div>
 
             <div className="flex-grow flex items-center justify-center">
-                {showSummary ? (
-                    renderSummary()
-                ) : (
-                    questions.length > 0 && (
-                        <div className="bg-white p-8 rounded-lg shadow-lg max-w-3xl w-full">
-                            <h1 className="text-2xl font-bold mb-4">Question {currentQuestionIndex + 1}/{questions.length}</h1>
-                            {renderQuestion(questions[currentQuestionIndex])}
+                {showSummary ? renderSummary() : (
+                    <div className="bg-white p-8 rounded-lg shadow-lg max-w-3xl w-full">
+                        <h1 className="text-2xl font-bold mb-4">Exam: {exam.name}</h1>
+                        <p className="mb-6">{exam.description}</p>
 
-                            <div className="flex justify-between mt-6">
-                                {currentQuestionIndex > 0 && (
-                                    <button
-                                        className="bg-blue-500 text-white px-4 py-2 rounded"
-                                        onClick={prevQuestion}
-                                    >
-                                        Previous
-                                    </button>
-                                )}
-                                
-                                {currentQuestionIndex === questions.length - 1 ? (
-                                    <button
-                                        className="bg-green-500 text-white px-4 py-2 rounded"
-                                        onClick={finishExam}
-                                    >
-                                        Finish
-                                    </button>
-                                ) : (
-                                    <button
-                                        className="bg-blue-500 text-white px-4 py-2 rounded"
-                                        onClick={nextQuestion}
-                                    >
-                                        Next
-                                    </button>
-                                )}
-                            </div>
+                        {questions.length > 0 ? renderQuestion(questions[currentQuestionIndex]) : <p>Loading questions...</p>}
+
+                        <div className="flex justify-between mt-6">
+                            <button className="bg-gray-300 text-gray-700 px-4 py-2 rounded" onClick={prevQuestion} disabled={currentQuestionIndex === 0}>
+                                Previous
+                            </button>
+                            <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={nextQuestion} disabled={currentQuestionIndex === questions.length - 1}>
+                                Next
+                            </button>
                         </div>
-                    )
+
+                        <button className="bg-green-500 text-white px-4 py-2 rounded mt-4" onClick={finishExam}>
+                            Finish Exam
+                        </button>
+                    </div>
                 )}
             </div>
-
-            {/* Footer */}
-            <footer className="bg-gray-900 text-white text-center p-4">
-                <p>&copy; 2024 Programming Assistant. All rights reserved.</p>
-                <div className="flex justify-center space-x-4 mt-2">
-                    <a href="/privacy" className="text-gray-400 hover:underline transition duration-200">Privacy Policy</a>
-                    <a href="/terms" className="text-gray-400 hover:underline transition duration-200">Terms of Service</a>
-                </div>
-            </footer>
         </div>
     );
 }

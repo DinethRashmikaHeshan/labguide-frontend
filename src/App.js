@@ -12,6 +12,8 @@ import Test from "./ExamManagement/Test";
 import TestQuestions from "./ExamManagement/TestQuestions";
 import Results from "./ExamManagement/Results";
 import ResultTest from "./ExamManagement/ResultTest";
+import UpdateExam from "./ExamManagement/UpdateExam";
+import UpdateQuestion from "./ExamManagement/UpdateQuestion";
 
 import Login from "./Login/Login"; // Make sure you have this component
 import Signup from "./Login/Signup"; // Import Signup component
@@ -79,6 +81,9 @@ function App() {
           <Route path="/testQuestions/:id" element={<TestQuestions />}></Route>
           <Route path="/results" element={<Results />}></Route>
           <Route path="/results/:id" element={<ResultTest />}></Route>
+          <Route path='/updateQuestion/:id/:questionID' element={<UpdateQuestion />}></Route>
+          <Route path='/updateExam/:examId' element={<UpdateExam />}></Route>
+
           //special function routes
           <Route
             path="/code-editor"

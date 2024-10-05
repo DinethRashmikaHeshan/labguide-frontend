@@ -47,19 +47,54 @@ function Test() {
 
     return (
         <div className="min-h-screen flex flex-col bg-gradient-to-r from-[#6482AD] to-[#7FA1C3]">
-            {/* Header */}
             <header className="flex justify-between items-center p-6 bg-gray-900 text-white shadow-lg transition duration-300">
-                <h1 className="text-2xl font-extrabold">Programming Assistant</h1>
-                <nav>
-                    <ul className="flex space-x-6">
-                        <Link to={'./../'}><li><a href="#features" className="hover:text-green-400 transition duration-200">Home</a></li></Link>
-                        <li><a href="#features" className="hover:text-green-400 transition duration-200">Features</a></li>
-                        <li><a href="#resources" className="hover:text-green-400 transition duration-200">Exams</a></li>
-                        <li><a href="#contact" className="hover:text-green-400 transition duration-200">Contact</a></li>
-                    </ul>
-                </nav>
-            </header>
+        <h1 className="text-2xl font-extrabold">&lt;Lab Guide/&gt;</h1>
+        <nav>
+          <ul className="flex space-x-6">
+            <Link to={"/home"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Home
+                </a>
+              </li>
+            </Link>
 
+            <Link to={"/test"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Exams
+                </a>
+              </li>
+            </Link>
+            <Link to={"/report"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Report
+                </a>
+              </li>
+            </Link>
+            <Link to={"/code/:userId"}>
+              <li>
+                <a
+                  href="#mycodes"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  My Codes
+                </a>
+              </li>
+            </Link>
+          </ul>
+        </nav>
+      </header>
             {/* Main Content */}
             <main className="flex-grow p-8">
                 <div className="bg-[#F5EDED] p-8 rounded-lg shadow-lg max-w-6xl mx-auto">
