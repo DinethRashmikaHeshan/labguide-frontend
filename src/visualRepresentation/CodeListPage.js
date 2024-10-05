@@ -61,26 +61,41 @@ const CodeListPage = ({ username, userId }) => {
   const generatePDF = (codes) => {
     const doc = new jsPDF();
 
-    // Set the app's name as the heading
-    doc.setFontSize(18);
-    doc.text(
-      "LabGuide - Code Submissions Report",
-      105,
-      20,
-      null,
-      null,
-      "center"
-    );
+    // Set a background color for the entire page
+    doc.setFillColor(30, 30, 30); // Dark background (RGB values)
+    doc.rect(
+      0,
+      0,
+      doc.internal.pageSize.width,
+      doc.internal.pageSize.height,
+      "F"
+    ); // Fill entire page
 
-    // Display the current PDF generation date in the top-left corner
+    // Heading Section Background
+    doc.setFillColor(22, 160, 133); // Teal color for heading section
+    doc.rect(0, 0, doc.internal.pageSize.width, 30, "F"); // Heading background rectangle
+
+    // Set the app's name as the main heading with white text, bold, and larger font size
+    doc.setFontSize(26); // Increase font size
+    doc.setFont("helvetica", "bold"); // Set font to bold
+    doc.setTextColor(255, 255, 255); // White text for the main heading
+    doc.text("<Lab Guide/>", 105, 18, null, null, "center");
+
+    // Sub-heading: Set the report title
+    doc.setFontSize(16);
+    doc.setTextColor(255, 255, 255); // White text
+    doc.text("Code Submissions Report", 105, 28, null, null, "center");
+
+    // Display the current PDF generation date in the top-left corner with white text
     const currentDate = new Date().toLocaleDateString();
     doc.setFontSize(10);
-    doc.text(`Report generated on: ${currentDate}`, 10, 10);
+    doc.setTextColor(255, 255, 255); // White text
+    doc.text(`Report generated on: ${currentDate}`, 10, 35);
 
     // Define a margin for the content
-    let startY = 40;
+    let startY = 45;
 
-    // Create table headers
+    // Create table headers with teal background and white text
     const tableHeaders = [["Title", "Language", "Submission Date"]];
 
     // Map code data to rows
@@ -90,23 +105,40 @@ const CodeListPage = ({ username, userId }) => {
       new Date(code.submissionDate).toLocaleDateString(),
     ]);
 
-    // Use jsPDF autotable for a clean table layout
+    // Use jsPDF autotable for a clean table layout with matching theme
     doc.autoTable({
       head: tableHeaders,
       body: tableData,
       startY,
       theme: "grid", // Use a grid theme for better styling
       margin: { top: 40 },
-      headStyles: { fillColor: [22, 160, 133] }, // Customize header background color (Chakra green color)
-      bodyStyles: { valign: "middle" },
-      alternateRowStyles: { fillColor: [245, 245, 245] }, // Light grey for alternate rows
+      headStyles: { fillColor: [22, 160, 133], textColor: [255, 255, 255] }, // Teal background, white text
+      bodyStyles: {
+        valign: "middle",
+        textColor: [255, 255, 255],
+        fillColor: [50, 50, 50],
+      }, // White text, dark grey row
+      alternateRowStyles: { fillColor: [40, 40, 40] }, // Darker grey for alternate rows
+      styles: { fillColor: [30, 30, 30], textColor: [255, 255, 255] }, // Dark grey background, white text for table
     });
 
-    // Add a footer on every page
+    // Add a footer with white text and teal line
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
+
+      // Draw a teal line at the footer
+      doc.setDrawColor(22, 160, 133);
+      doc.line(
+        10,
+        doc.internal.pageSize.height - 15,
+        doc.internal.pageSize.width - 10,
+        doc.internal.pageSize.height - 15
+      );
+
+      // Add footer text
       doc.setFontSize(10);
+      doc.setTextColor(255, 255, 255); // White text
       doc.text(
         `Page ${i} of ${pageCount}`,
         105,
@@ -118,7 +150,7 @@ const CodeListPage = ({ username, userId }) => {
     }
 
     // Save the PDF
-    doc.save("code-list-report.pdf");
+    doc.save("LabGuide_Code_Submissions_Report.pdf");
   };
 
   const deleteCode = async (id) => {
