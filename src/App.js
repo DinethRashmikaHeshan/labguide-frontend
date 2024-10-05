@@ -11,6 +11,8 @@ import Test from './ExamManagement/Test'
 import TestQuestions from './ExamManagement/TestQuestions';
 import Results from './ExamManagement/Results';
 import ResultTest from './ExamManagement/ResultTest';
+import UpdateQuestion from './ExamManagement/UpdateQuestion';
+import UpdateExam from './ExamManagement/UpdateExam';
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
           <Route path='/testQuestions/:id' element={<TestQuestions />}></Route>
           <Route path='/results' element={<Results />}></Route>
           <Route path='/results/:id' element={<ResultTest />}></Route>
+          <Route path='/updateQuestion/:id/:questionID' element={<UpdateQuestion />}></Route>
+          <Route path='/updateExam/:examId' element={<UpdateExam />}></Route>
 
           
         </Routes>

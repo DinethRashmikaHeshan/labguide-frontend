@@ -115,11 +115,14 @@ function Questions() {
                                     >
                                         Delete
                                     </button>
-                                    <button
-                                        className="bg-green-600 text-white py-2 px-4 ml-2 rounded-lg hover:bg-green-500 transition duration-200"
-                                    >
-                                        Update
-                                    </button>
+                                    {/* <Link to={`/updateQuestion/${id}/${question._id}`}>
+                                        <button
+                                            className="bg-green-600 text-white py-2 px-4 ml-2 rounded-lg hover:bg-green-500 transition duration-200"
+                                        >
+                                            Update
+                                        </button>
+                                    </Link> */}
+                                    
                                 </div>
                             </div>
                         )}

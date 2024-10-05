@@ -128,33 +128,38 @@ function Test() {
 
                 {/* Modal for Registration Number Input */}
                 {isModalOpen && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg">
-                            <h2 className="text-xl font-bold mb-4">Enter Registration Number</h2>
-                            <input
-                                type="text"
-                                value={registrationNo}
-                                onChange={(e) => setRegistrationNo(e.target.value)}
-                                placeholder="Registration Number"
-                                className="border border-gray-300 p-2 rounded w-full mb-4"
-                            />
-                            <div className="flex justify-end">
-                                <button
-                                    className="bg-[#6482AD] text-white px-4 py-2 rounded hover:bg-[#7FA1C3] mr-2"
-                                    onClick={handleRegistrationSubmit}
-                                >
-                                    Submit
-                                </button>
-                                <button
-                                    className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
-                                    onClick={() => setIsModalOpen(false)}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Enter Registration Number</h2>
+            <input
+                type="text"
+                value={registrationNo}
+                onChange={(e) => setRegistrationNo(e.target.value)}
+                placeholder="Registration Number"
+                className="border border-gray-300 p-2 rounded w-full mb-4"
+            />
+            <div className="flex justify-end">
+                <button
+                    className="bg-[#6482AD] text-white px-4 py-2 rounded hover:bg-[#7FA1C3] mr-2"
+                    onClick={handleRegistrationSubmit}
+                    disabled={!registrationNo.trim()} // Disable if input is empty
+                >
+                    Submit
+                </button>
+                <button
+                    className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
+                    onClick={() => setIsModalOpen(false)}
+                >
+                    Cancel
+                </button>
+            </div>
+            {registrationNo.trim() === '' && (
+                <p className="text-red-500 mt-2">Registration number cannot be empty.</p>
+            )}
+        </div>
+    </div>
+)}
+
             </main>
 
             {/* Footer */}
