@@ -3,6 +3,8 @@ import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import ErrorLineGraph from './ErrorLineGraph'; // Import the ErrorLineGraph component
 import './LogicalErrorsReport.css'; // Include the CSS file for styling
+import { Link } from "react-router-dom";
+
 
 // Register required Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -108,6 +110,56 @@ const LogicalErrorsReport = ({ username }) => {
   };
 
   return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="flex justify-between items-center p-6 bg-gray-900 text-white shadow-lg transition duration-300">
+        <h1 className="text-2xl font-extrabold">&lt;Lab Guide/&gt;</h1>
+        <nav>
+          <ul className="flex space-x-6">
+            <Link to={"/home"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Home
+                </a>
+              </li>
+            </Link>
+
+            <Link to={"/test"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Exams
+                </a>
+              </li>
+            </Link>
+            <Link to={"/report"}>
+              <li>
+                <a
+                  href="#features"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  Report
+                </a>
+              </li>
+            </Link>
+            <Link to={"/code/:userId"}>
+              <li>
+                <a
+                  href="#mycodes"
+                  className="hover:text-green-400 transition duration-200"
+                >
+                  My Codes
+                </a>
+              </li>
+            </Link>
+          </ul>
+        </nav>
+      </header>
     <div className="logical-errors-report">
       <h1 className="title">Logical Errors Report for {username}</h1>
       
@@ -188,6 +240,25 @@ const LogicalErrorsReport = ({ username }) => {
 
       {/* Display the ErrorLineGraph component with username and fromDate props */}
       <ErrorLineGraph username={username}  />
+    </div>
+    {/* Footer */}
+    <footer className="bg-gray-900 text-white text-center p-4">
+        <p>&copy; 2024 Programming Assistant. All rights reserved.</p>
+        <div className="flex justify-center space-x-4 mt-2">
+          <a
+            href="/privacy"
+            className="text-gray-400 hover:underline transition duration-200"
+          >
+            Privacy Policy
+          </a>
+          <a
+            href="/terms"
+            className="text-gray-400 hover:underline transition duration-200"
+          >
+            Terms of Service
+          </a>
+        </div>
+      </footer>
     </div>
   );
 };
