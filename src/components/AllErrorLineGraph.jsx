@@ -59,17 +59,6 @@ const AllErrorLineGraph = () => {
     <div>
       <h1>Error Frequency Over Time</h1>
       
-      {/* Input field to filter data by username */}
-      <div style={{ marginBottom: '20px' }}>
-        <label>Filter by Username: </label>
-        <input
-          type="text"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          placeholder="Enter username"
-        />
-      </div>
-      
       {Object.keys(filteredData).map((type, index) => (
         <div key={index} style={{ margin: '30px 0' }}>
           <h2>{type} Errors</h2>
