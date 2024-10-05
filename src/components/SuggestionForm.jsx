@@ -157,7 +157,7 @@ const SuggestionForm = () => {
                         className="flex items-center text-lg text-[#6482AD] font-bold py-3 px-4 rounded-md hover:bg-[#7FA1C3] hover:text-white transition duration-300"
                     >
                         <ChartBarIcon className="h-6 w-6 mr-2" /> {/* Results Icon */}
-                        Results
+                        Attendance
                     </Link>
                     <Link
                         to="/all-students-reports"
