@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
-function Test() {
+function Test({ username }) {
     const [exams, setExams] = useState([]);
     const [openIndex, setOpenIndex] = useState(null); // State to track which accordion is open
     const [registrationNo, setRegistrationNo] = useState(''); // State for registration number
@@ -19,6 +19,7 @@ function Test() {
         try {
             const res = await axios.get('http://localhost:3000/exam/exam');
             setExams(res.data);
+            setRegistrationNo(username)
         } catch (error) {
             alert('Error: ' + (error.response?.data || error.message));
         }
@@ -35,9 +36,10 @@ function Test() {
 
     const handleRegistrationSubmit = () => {
         // Navigate to the test questions page with the exam ID and registration number
+        
         navigate(`/testQuestions/${selectedExamId}`, { state: { registrationNo } });
         setIsModalOpen(false); // Close the modal
-        setRegistrationNo(''); // Reset the registration number
+        
     };
 
     // Filter exams based on search query
@@ -168,7 +170,7 @@ function Test() {
                             <h2 className="text-xl font-bold mb-4">Enter Registration Number</h2>
                             <input
                                 type="text"
-                                value={registrationNo}
+                                value={username}
                                 onChange={(e) => setRegistrationNo(e.target.value)}
                                 placeholder="Registration Number"
                                 className="border border-gray-300 p-2 rounded w-full mb-4"

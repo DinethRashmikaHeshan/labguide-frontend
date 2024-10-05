@@ -8,7 +8,7 @@ function CreateQuestion() {
 
   const sendData = async (event) => {
     try {
-      // event.preventDefault()
+      event.preventDefault()
 
       if (questionType === 'None') {
         alert('Please select a valid question type.')

@@ -77,7 +77,7 @@ function App() {
             element={<CreateQuestion />}
           ></Route>
           <Route path="/question/:id" element={<Questions />}></Route>
-          <Route path="/test" element={<Test />}></Route>
+          <Route path="/test" element={<Test username={username}/>}></Route>
           <Route path="/testQuestions/:id" element={<TestQuestions />}></Route>
           <Route path="/results" element={<Results />}></Route>
           <Route path="/results/:id" element={<ResultTest />}></Route>
