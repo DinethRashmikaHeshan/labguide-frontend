@@ -18,7 +18,7 @@ function Exam() {
         } catch (error) {
             alert("Error: " + error.response.data);
         }
-    };
+    };  
 
     const deleteExam = async (examID) => {
         try {
@@ -36,7 +36,7 @@ function Exam() {
 
     return (
         <div className="min-h-screen flex bg-gradient-to-r from-[#6482AD] to-[#7FA1C3]">
-            {/* Fixed Vertical Navigation Bar */}
+            {/* Navigation - Fixed Position */}
             <nav className="bg-white p-6 shadow-lg rounded-lg w-64 h-screen fixed top-0 left-0 overflow-y-auto">
                 <h1 className="text-2xl font-bold text-[#6482AD] mb-6">Instructor Dashboard</h1>
                 <div className="flex flex-col">
@@ -75,7 +75,6 @@ function Exam() {
                         <LifebuoyIcon className="h-7 w-7 mr-2" /> {/* Results Icon */}
                         Hinting Management
                     </Link>
-
                 </div>
             </nav>
 
@@ -129,6 +128,14 @@ function Exam() {
                                                         className="bg-[#7FA1C3] text-white py-2 px-4 rounded-md hover:bg-[#6482AD] focus:outline-none focus:ring-2 focus:ring-[#6482AD]"
                                                     >
                                                         See More
+                                                    </button>
+                                                </Link>
+                                                {/* Update Button */}
+                                                <Link to={`/updateExam/${exam._id}`}>
+                                                    <button
+                                                        className="bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                                    >
+                                                        UPDATE
                                                     </button>
                                                 </Link>
                                             </div>
