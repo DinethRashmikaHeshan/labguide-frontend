@@ -107,7 +107,7 @@ const HintManager = () => {
     const tableHeaders = [["Error Type", "Hint Text"]];
   
     // Map hint data to rows
-    const tableData = hints.map((hint) => [
+    const tableData = filteredHints.map((hint) => [
       hint.errorType,
       hint.hintText,
     ]);
