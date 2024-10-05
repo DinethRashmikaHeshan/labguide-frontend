@@ -17,6 +17,10 @@ const HintManager = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedDeleteId, setSelectedDeleteId] = useState(null);
 
+  // Validation states
+  const [addError, setAddError] = useState('');
+  const [editError, setEditError] = useState('');
+
   useEffect(() => {
     fetchHints();
   }, []);
@@ -30,7 +34,24 @@ const HintManager = () => {
     }
   };
 
+  const validateFields = (errorType, hintText) => {
+    const specialCharRegex = /[^a-zA-Z0-9 ]/g; // Regular expression to detect special characters
+    if (!errorType || !hintText) {
+      return "Both 'Error Type' and 'Hint Text' are required fields.";
+    }
+    if (specialCharRegex.test(errorType)) {
+      return "Error Type cannot contain special characters.";
+    }
+    return '';
+  };
+
   const createHint = async () => {
+    const validationError = validateFields(newErrorType, newHintText);
+    if (validationError) {
+      setAddError(validationError);
+      return;
+    }
+
     try {
       const response = await axios.post('http://localhost:3000/hint/hints', {
         hintText: newHintText,
@@ -40,12 +61,19 @@ const HintManager = () => {
       setNewHintText('');
       setNewErrorType('');
       setIsAddModalOpen(false); // Close modal after adding
+      setAddError(''); // Clear error state
     } catch (error) {
       console.error('Error creating hint:', error);
     }
   };
 
   const updateHint = async () => {
+    const validationError = validateFields(editErrorType, editHintText);
+    if (validationError) {
+      setEditError(validationError);
+      return;
+    }
+
     try {
       const response = await axios.put(`http://localhost:3000/hint/hints/${editId}`, {
         hintText: editHintText,
@@ -56,6 +84,7 @@ const HintManager = () => {
       setEditHintText('');
       setEditErrorType('');
       setIsEditModalOpen(false); // Close modal after saving
+      setEditError(''); // Clear error state
     } catch (error) {
       console.error('Error updating hint:', error);
     }
@@ -158,16 +187,15 @@ const HintManager = () => {
   
     // Save the PDF
     doc.save("Hint_Report.pdf");
-  };
-  
 
-  // Filter hints based on search input
+  };
+
   const filteredHints = hints.filter(hint =>
     hint.errorType.toLowerCase().includes(searchTerm.toLowerCase()) ||
     hint.hintText.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  return  (
+  return (
     <div className="container mt-5">
       <div className="mb-3">
         <button className="btn btn-success" onClick={() => setIsAddModalOpen(true)}>
@@ -236,7 +264,7 @@ const HintManager = () => {
       {/* Add Error Type Modal */}
       {isAddModalOpen && (
         <div className="modal fade show" style={{ display: 'block' }}>
-          <div className="modal-dialog modal-dialog-centered"> {/* Centering modal */}
+          <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" onClick={() => setIsAddModalOpen(false)}>&times;</button>
@@ -251,6 +279,7 @@ const HintManager = () => {
                   <label>Hint Text</label>
                   <textarea className="form-control" value={newHintText} onChange={(e) => setNewHintText(e.target.value)} required />
                 </div>
+                {addError && <p className="text-danger">{addError}</p>}
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-default" onClick={() => setIsAddModalOpen(false)}>Cancel</button>
@@ -264,7 +293,7 @@ const HintManager = () => {
       {/* Edit Error Type Modal */}
       {isEditModalOpen && (
         <div className="modal fade show" style={{ display: 'block' }}>
-          <div className="modal-dialog modal-dialog-centered"> {/* Centering modal */}
+          <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" onClick={() => setIsEditModalOpen(false)}>&times;</button>
@@ -279,20 +308,21 @@ const HintManager = () => {
                   <label>Hint Text</label>
                   <textarea className="form-control" value={editHintText} onChange={(e) => setEditHintText(e.target.value)} required />
                 </div>
+                {editError && <p className="text-danger">{editError}</p>}
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-default" onClick={() => setIsEditModalOpen(false)}>Cancel</button>
-                <button type="button" className="btn btn-info" onClick={updateHint}>Save</button>
+                <button type="button" className="btn btn-success" onClick={updateHint}>Save</button>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Delete Error Type Modal */}
+      {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && (
         <div className="modal fade show" style={{ display: 'block' }}>
-          <div className="modal-dialog modal-dialog-centered"> {/* Centering modal */}
+          <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" onClick={() => setIsDeleteModalOpen(false)}>&times;</button>
