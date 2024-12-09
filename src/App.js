@@ -57,7 +57,7 @@ function App() {
           <Route path="/allEerrorLineGraph" element={<AllErrorLineGraph/>} />
           <Route path="/" element={<Navigate to="/login" />} />
           //Home
-          <Route path='/' element={<Home />}></Route>
+          <Route path='/home' element={<Home />}/>
           
           //exam management routes
           <Route path='/exams' element={<Exam />}></Route>
